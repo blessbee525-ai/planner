@@ -7,24 +7,24 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg:#fff;--bg2:#f7f6f3;--bg3:#eeede8;
-  --text:#1a1a1a;--text2:#666;--text3:#aaa;
-  --border:#e5e4de;--border2:#ccc;
-  --accent:#1a1a1a;--accent-inv:#fff;
-  --r:10px;--rl:14px;
-  --cs:#E1F5EE;--cc:#085041;
-  --es:#EEEDFE;--ec:#3C3489;
-  --is:#FAEEDA;--ic:#854F0B;
-  --vs:#FBE8F0;--vc:#72243E;
-  --ke:#5DCAA5;--kt:#AFA9EC;
+--bg:#fff;--bg2:#f7f6f3;--bg3:#eeede8;
+--text:#1a1a1a;--text2:#666;--text3:#aaa;
+--border:#e5e4de;--border2:#ccc;
+--accent:#1a1a1a;--accent-inv:#fff;
+--r:10px;--rl:14px;
+--cs:#E1F5EE;--cc:#085041;
+--es:#EEEDFE;--ec:#3C3489;
+--is:#FAEEDA;--ic:#854F0B;
+--vs:#FBE8F0;--vc:#72243E;
+--ke:#5DCAA5;--kt:#AFA9EC;
 }
 @media(prefers-color-scheme:dark){:root{
-  --bg:#1c1c1e;--bg2:#2c2c2e;--bg3:#3a3a3c;
-  --text:#f0f0f0;--text2:#aaa;--text3:#555;
-  --border:#3a3a3c;--border2:#555;
-  --accent:#f0f0f0;--accent-inv:#1c1c1e;
-  --cs:#04342C;--cc:#9FE1CB;--es:#26215C;--ec:#CECBF6;
-  --is:#412402;--ic:#FAC775;--vs:#4B1528;--vc:#F4C0D1;
+--bg:#1c1c1e;--bg2:#2c2c2e;--bg3:#3a3a3c;
+--text:#f0f0f0;--text2:#aaa;--text3:#555;
+--border:#3a3a3c;--border2:#555;
+--accent:#f0f0f0;--accent-inv:#1c1c1e;
+--cs:#04342C;--cc:#9FE1CB;--es:#26215C;--ec:#CECBF6;
+--is:#412402;--ic:#FAC775;--vs:#4B1528;--vc:#F4C0D1;
 }}
 body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Noto Sans KR',sans-serif;font-size:15px;min-height:100vh}
 .topbar{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);padding:12px 16px 0}
@@ -47,7 +47,6 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 .tg-e{background:var(--es);color:var(--ec)}
 .tg-i{background:var(--is);color:var(--ic)}
 .tg-v{background:var(--vs);color:var(--vc)}
-/* 할일 */
 .ti{display:flex;align-items:flex-start;gap:9px;padding:10px 12px;background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--r);margin-bottom:5px;cursor:pointer}
 .ti.kwe{border-left:3px solid var(--ke)}
 .ti.kwt{border-left:3px solid var(--kt)}
@@ -63,7 +62,6 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 .tmin{font-size:11px;color:var(--text3)}
 .tact{display:flex;gap:4px;margin-top:5px}
 .add-tb{width:100%;padding:7px;font-size:12px;color:var(--text2);background:none;border:1px dashed var(--border2);border-radius:var(--r);cursor:pointer;margin-top:4px}
-/* 실제 소요시간 */
 .actual-row{display:flex;align-items:center;gap:6px;margin-top:5px}
 .actual-label{font-size:11px;color:var(--text2);white-space:nowrap}
 .actual-inp{width:52px;font-size:12px;font-weight:600;text-align:center;padding:3px 4px;border:1px solid var(--border2);border-radius:6px;background:var(--bg);color:var(--text)}
@@ -73,7 +71,6 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 .sc{background:var(--bg2);border-radius:var(--r);padding:10px;text-align:center}
 .sn{font-size:22px;font-weight:700}
 .sl{font-size:11px;color:var(--text2);margin-top:2px}
-/* 주간 */
 .wn{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 .wl{font-size:13px;font-weight:600}
 .dg{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:12px}
@@ -81,7 +78,6 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 .dc .dn{font-size:11px;color:var(--text2);margin-bottom:4px}
 .dc input{width:100%;font-size:13px;font-weight:700;text-align:center;border:1px solid var(--border);border-radius:6px;padding:3px 1px;background:var(--bg);color:var(--text)}
 .dc span{font-size:10px;color:var(--text3)}
-/* 이벤트 */
 .evbox{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:12px;margin-bottom:12px}
 .evtit{font-size:13px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
 .evi{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:9px 11px;margin-bottom:6px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
@@ -93,11 +89,9 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 .fl label{font-size:11px;color:var(--text2)}
 .fl input,.fl select{font-size:13px;padding:7px 9px;border:1px solid var(--border);border-radius:7px;background:var(--bg);color:var(--text);width:100%}
 .fa{display:flex;gap:6px}
-/* 붙여넣기 */
 .pg{background:var(--bg2);border-radius:var(--rl);padding:14px;margin-bottom:12px;font-size:13px;line-height:1.8;color:var(--text2)}
 .pg b{color:var(--text)}
 .pa{width:100%;min-height:150px;font-size:13px;padding:10px;border:1px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--text);resize:vertical;line-height:1.6;margin-bottom:10px}
-/* 기록/성과 */
 .rec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .rec-title{font-size:15px;font-weight:700}
 .year-sel{font-size:13px;padding:5px 8px;border:1px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--text)}
@@ -125,7 +119,6 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 .wr-meta{font-size:11px;color:var(--text2);margin-top:3px}
 .wr-tasks{font-size:11px;color:var(--text3);margin-top:4px;line-height:1.6}
 .no-rec{text-align:center;padding:2.5rem 1rem;color:var(--text3);font-size:13px;line-height:1.9}
-/* 목표 */
 .gc{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:14px;margin-bottom:12px}
 .gt{display:flex;align-items:center;gap:10px;margin-bottom:10px}
 .ge{font-size:22px}
@@ -137,11 +130,9 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 .ptx{font-size:12px;color:var(--text2)}
 .pp{font-size:12px;font-weight:700}
 .gsl{width:100%;margin-top:10px;accent-color:var(--accent)}
-/* 플랜 헤더 */
 .pdh{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;margin-top:14px}
 .pdn{font-size:14px;font-weight:700}
 .pdm{font-size:11px;color:var(--text3)}
-/* 토스트 */
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--accent);color:var(--accent-inv);padding:9px 20px;border-radius:24px;font-size:13px;font-weight:600;opacity:0;transition:opacity 0.25s;pointer-events:none;white-space:nowrap;z-index:9999}
 .toast.show{opacity:1}
 .empty-st{text-align:center;padding:2.5rem 1rem;color:var(--text3);font-size:13px;line-height:1.9}
@@ -149,170 +140,148 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 </head>
 <body>
 <div class="topbar">
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-    <div class="topbar-title">🎨 그림 수익화 플래너</div>
-    <div style="display:flex;align-items:center;gap:8px">
-      <span id="sync-status" style="font-size:11px;color:var(--text3)">☁️ 연결 중...</span>
-      <button onclick="syncLoad()" style="font-size:11px;padding:3px 8px;border:1px solid var(--border2);border-radius:6px;background:var(--bg);color:var(--text2);cursor:pointer">새로고침</button>
-    </div>
-  </div>
-  <div class="tabs">
-    <button class="tab active" onclick="sw('today')">오늘</button>
-    <button class="tab" onclick="sw('paste')">계획붙여넣기</button>
-    <button class="tab" onclick="sw('records')">기록·성과</button>
-    <button class="tab" onclick="sw('goals')">목표</button>
-  </div>
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+<div class="topbar-title">🎨 그림 수익화 플래너</div>
+<div style="display:flex;align-items:center;gap:8px">
+<span id="sync-status" style="font-size:11px;color:var(--text3)">☁️ 연결 중...</span>
+<button onclick="syncLoad()" style="font-size:11px;padding:3px 8px;border:1px solid var(--border2);border-radius:6px;background:var(--bg);color:var(--text2);cursor:pointer">새로고침</button>
 </div>
-<div class="content">
+</div>
+<div class="tabs">
+<button class="tab active" onclick="sw('today')">오늘</button>
+<button class="tab" onclick="sw('paste')">계획붙여넣기</button>
+<button class="tab" onclick="sw('records')">기록·성과</button>
+<button class="tab" onclick="sw('goals')">목표</button>
+</div>
+</div>
 
+<div class="content">
 <!-- 오늘 -->
 <div id="s-today" class="sec active">
-  <div class="sr">
-    <div class="sc"><div class="sn" id="sd">0</div><div class="sl">완료</div></div>
-    <div class="sc"><div class="sn" id="st">0</div><div class="sl">전체</div></div>
-    <div class="sc"><div class="sn" id="sp">0%</div><div class="sl">달성률</div></div>
-  </div>
-  <div style="font-size:12px;color:var(--text2);margin-bottom:10px" id="today-label"></div>
-  <div id="today-list"></div>
+<div class="sr">
+<div class="sc"><div class="sn" id="sd">0</div><div class="sl">완료</div></div>
+<div class="sc"><div class="sn" id="st">0</div><div class="sl">전체</div></div>
+<div class="sc"><div class="sn" id="sp">0%</div><div class="sl">달성률</div></div>
+</div>
+<div style="font-size:12px;color:var(--text2);margin-bottom:10px" id="today-label"></div>
+<div id="today-list"></div>
 </div>
 
 <!-- 계획붙여넣기 -->
 <div id="s-paste" class="sec">
-  <div class="pg">
-    <b>📋 클로드 프로젝트에서 계획 받는 법</b><br>
-    프로젝트에서 새 대화 열고 이렇게 요청하세요<br><br>
-    <b>"이번 주 계획 짜줘.</b><br>
-    월 2시간, 화 2시간, 수 3시간, 목 2시간, 금 1시간.<br>
-    이번 주 수요일에 그라폴리오 작업 90분 있어."
-  </div>
-
-  <!-- 이벤트 작업 (붙여넣기 전 설정) -->
-  <div class="evbox" style="margin-bottom:12px">
-    <div class="evtit"><span>📌 이번 주 특별 작업</span><button class="btn bs" onclick="togEv()">+ 추가</button></div>
-    <div id="ev-list"><div style="font-size:12px;color:var(--text3);text-align:center;padding:4px 0">그라폴리오·공모전 등은 클로드에게 직접 말하거나 여기 추가하세요</div></div>
-    <div class="evfm" id="ev-form">
-      <div class="fl"><label>작업 이름</label><input id="ev-nm" placeholder="예: 그라폴리오 일러스트, 봄 공모전"></div>
-      <div class="fl"><label>요일</label>
-        <select id="ev-dy"><option value="0">월요일</option><option value="1">화요일</option><option value="2">수요일</option><option value="3">목요일</option><option value="4">금요일</option></select>
-      </div>
-      <div class="fl"><label>예상 시간(분)</label><input id="ev-mn" type="number" value="90" min="10" max="480" step="10"></div>
-      <div class="fl"><label>메모(선택)</label><input id="ev-mo" placeholder="예: 마감 5/31, 주제: 여름"></div>
-      <div class="fa"><button class="btn bp bs" style="flex:1" onclick="addEv()">추가</button><button class="btn bs" onclick="togEv()">취소</button></div>
-    </div>
-  </div>
-
-  <textarea class="pa" id="paste-area" placeholder="여기에 클로드가 짜준 계획을 붙여넣으세요...
-
-예시)
-월요일
-- 스톡 요소 [투표함] 스케치 3컷 (약 50분)
-- 어도비 업로드 & 키워드 작성 (약 30분)
-
-화요일
-- 카카오 이모티콘 시안 8종 (약 90분)"></textarea>
-  <button class="fb" onclick="parsePaste()">체크리스트로 변환하기 ✦</button>
-  <div id="paste-preview"></div>
-  <div id="plan-result"></div>
+<div class="pg">
+<b>📋 클로드 프로젝트에서 계획 받는 법</b><br>
+프로젝트에서 새 대화 열고 이렇게 요청하세요<br><br>
+<b>"이번 주 계획 짜줘.</b><br>
+월 2시간, 화 2시간, 수 3시간, 목 2시간, 금 1시간.<br>
+이번 주 수요일에 그라폴리오 작업 90분 있어."
+</div>
+<div class="evbox" style="margin-bottom:12px">
+<div class="evtit"><span>📌 이번 주 특별 작업</span><button class="btn bs" onclick="togEv()">+ 추가</button></div>
+<div id="ev-list"><div style="font-size:12px;color:var(--text3);text-align:center;padding:4px 0">그라폴리오·공모전 등은 클로드에게 직접 말하거나 여기 추가하세요</div></div>
+<div class="evfm" id="ev-form">
+<div class="fl"><label>작업 이름</label><input id="ev-nm" placeholder="예: 그라폴리오 일러스트, 봄 공모전"></div>
+<div class="fl"><label>요일</label>
+<select id="ev-dy"><option value="0">월요일</option><option value="1">화요일</option><option value="2">수요일</option><option value="3">목요일</option><option value="4">금요일</option></select>
+</div>
+<div class="fl"><label>예상 시간(분)</label><input id="ev-mn" type="number" value="90" min="10" max="480" step="10"></div>
+<div class="fl"><label>메모(선택)</label><input id="ev-mo" placeholder="예: 마감 5/31, 주제: 여름"></div>
+<div class="fa"><button class="btn bp bs" style="flex:1" onclick="addEv()">추가</button><button class="btn bs" onclick="togEv()">취소</button></div>
+</div>
+</div>
+<textarea class="pa" id="paste-area" placeholder="여기에 클로드가 짜준 계획을 붙여넣으세요..."></textarea>
+<button class="fb" onclick="parsePaste()">체크리스트로 변환하기 ✦</button>
+<div id="paste-preview"></div>
+<div id="plan-result"></div>
 </div>
 
 <!-- 기록·성과 -->
 <div id="s-records" class="sec">
-  <div class="rec-header">
-    <span class="rec-title">📊 나의 작업 기록</span>
-    <select class="year-sel" id="year-sel" onchange="renderRecords()"></select>
-  </div>
-  <div id="rec-body"></div>
+<div class="rec-header">
+<span class="rec-title">📊 나의 작업 기록</span>
+<select class="year-sel" id="year-sel" onchange="renderRecords()"></select>
+</div>
+<div id="rec-body"></div>
 </div>
 
 <!-- 목표 -->
 <div id="s-goals" class="sec">
-
-  <!-- 월 업데이트 안내 -->
-  <div style="font-size:12px;color:var(--text2);background:var(--bg2);border-radius:var(--r);padding:10px 12px;margin-bottom:14px;line-height:1.7">
-    📅 <b>매달 초</b>에 수익·작업량을 업데이트해주세요<br>
-    📆 <b>연간 횟수</b>는 할 때마다 +1씩 올려주세요
-  </div>
-
-  <!-- 월 수익 현황 -->
-  <div style="font-size:13px;font-weight:700;margin-bottom:8px;color:var(--text)">💰 이번 달 수익</div>
-  <div class="gc">
-    <div class="gt"><span class="ge">🖼</span><div><div class="gtit">스톡 월 수익</div><div class="glb">목표: 월 100,000원</div></div></div>
-    <div class="pt"><div class="pf" id="g1f" style="width:15%"></div></div>
-    <div class="pb"><span class="ptx" id="g1t">15,000원</span><span class="pp" id="g1p">15%</span></div>
-    <input type="range" class="gsl" min="0" max="100000" step="500" value="15000" oninput="updG(1,this.value)">
-  </div>
-  <div class="gc">
-    <div class="gt"><span class="ge">🏆</span><div><div class="gtit">OGQ 월 수익</div><div class="glb">목표: 월 10,000원</div></div></div>
-    <div class="pt"><div class="pf" id="g2f" style="width:50%"></div></div>
-    <div class="pb"><span class="ptx" id="g2t">5,000원</span><span class="pp" id="g2p">50%</span></div>
-    <input type="range" class="gsl" min="0" max="10000" step="100" value="5000" oninput="updG(2,this.value)">
-  </div>
-
-  <!-- 월 작업량 -->
-  <div style="font-size:13px;font-weight:700;margin:14px 0 8px;color:var(--text)">🎨 이번 달 작업량</div>
-  <div class="gc">
-    <div class="gt"><span class="ge">✏️</span><div><div class="gtit">스톡 요소 그린 개수</div><div class="glb">목표: 월 50개</div></div></div>
-    <div class="pt"><div class="pf" id="g3f" style="width:0%"></div></div>
-    <div class="pb"><span class="ptx" id="g3t">0개</span><span class="pp" id="g3p">0%</span></div>
-    <input type="range" class="gsl" min="0" max="50" step="1" value="0" oninput="updG(3,this.value)">
-  </div>
-
-  <!-- OGQ 분기 판매 -->
-  <div style="font-size:13px;font-weight:700;margin:14px 0 8px;color:var(--text)">📦 이번 분기 OGQ 판매 <span style="font-size:11px;font-weight:400;color:var(--text3)">(프로 조건: 분기 500개)</span></div>
-  <div class="gc">
-    <div class="gt"><span class="ge">🛒</span><div><div class="gtit">분기 판매 개수</div><div class="glb" id="g4-quarter">2분기 (4~6월)</div></div></div>
-    <div class="pt"><div class="pf" id="g4f" style="width:2%"></div></div>
-    <div class="pb"><span class="ptx" id="g4t">10개 / 500개</span><span class="pp" id="g4p">2%</span></div>
-    <input type="range" class="gsl" min="0" max="500" step="1" value="10" oninput="updG(4,this.value)">
-    <div style="font-size:11px;color:var(--text3);margin-top:6px" id="g4-tip">프로까지 490개 더 필요해요. 지금은 제안 횟수 늘리기에 집중해요 💪</div>
-  </div>
-
-  <!-- 연간 활동 횟수 -->
-  <div style="font-size:13px;font-weight:700;margin:14px 0 8px;color:var(--text)">📊 올해 누적 활동 <span style="font-size:11px;font-weight:400;color:var(--text3)">(목표: 12월까지 33주)</span></div>
-  <div class="gc">
-    <div class="gt"><span class="ge">😊</span><div><div class="gtit">카카오 이모티콘 제안</div><div class="glb">목표: 연 33회</div></div></div>
-    <div class="pt"><div class="pf" id="g5f" style="width:0%"></div></div>
-    <div class="pb"><span class="ptx" id="g5t">0회</span><span class="pp" id="g5p">0%</span></div>
-    <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
-      <button class="btn bs" onclick="stepG(5,-1)">−1</button>
-      <div style="flex:1;text-align:center;font-size:13px;font-weight:600" id="g5-num">0 / 33회</div>
-      <button class="btn bp bs" onclick="stepG(5,1)">+1</button>
-    </div>
-  </div>
-  <div class="gc">
-    <div class="gt"><span class="ge">🏅</span><div><div class="gtit">OGQ 이모티콘 제안</div><div class="glb">목표: 연 33회</div></div></div>
-    <div class="pt"><div class="pf" id="g6f" style="width:0%"></div></div>
-    <div class="pb"><span class="ptx" id="g6t">0회</span><span class="pp" id="g6p">0%</span></div>
-    <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
-      <button class="btn bs" onclick="stepG(6,-1)">−1</button>
-      <div style="flex:1;text-align:center;font-size:13px;font-weight:600" id="g6-num">0 / 33회</div>
-      <button class="btn bp bs" onclick="stepG(6,1)">+1</button>
-    </div>
-  </div>
-  <div class="gc">
-    <div class="gt"><span class="ge">📱</span><div><div class="gtit">릴스 업로드</div><div class="glb">목표: 연 66회 (주 2회)</div></div></div>
-    <div class="pt"><div class="pf" id="g7f" style="width:0%"></div></div>
-    <div class="pb"><span class="ptx" id="g7t">0회</span><span class="pp" id="g7p">0%</span></div>
-    <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
-      <button class="btn bs" onclick="stepG(7,-1)">−1</button>
-      <div style="flex:1;text-align:center;font-size:13px;font-weight:600" id="g7-num">0 / 66회</div>
-      <button class="btn bp bs" onclick="stepG(7,1)">+1</button>
-    </div>
-  </div>
-  <div class="gc">
-    <div class="gt"><span class="ge">🗂</span><div><div class="gtit">스톡 템플릿 제작</div><div class="glb">목표: 연 33개</div></div></div>
-    <div class="pt"><div class="pf" id="g8f" style="width:0%"></div></div>
-    <div class="pb"><span class="ptx" id="g8t">0개</span><span class="pp" id="g8p">0%</span></div>
-    <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
-      <button class="btn bs" onclick="stepG(8,-1)">−1</button>
-      <div style="flex:1;text-align:center;font-size:13px;font-weight:600" id="g8-num">0 / 33개</div>
-      <button class="btn bp bs" onclick="stepG(8,1)">+1</button>
-    </div>
-  </div>
-
+<div style="font-size:12px;color:var(--text2);background:var(--bg2);border-radius:var(--r);padding:10px 12px;margin-bottom:14px;line-height:1.7">
+📅 <b>매달 초</b>에 수익·작업량을 업데이트해주세요<br>
+📆 <b>연간 횟수</b>는 할 때마다 +1씩 올려주세요
+</div>
+<div style="font-size:13px;font-weight:700;margin-bottom:8px;color:var(--text)">💰 이번 달 수익</div>
+<div class="gc">
+<div class="gt"><span class="ge">🖼</span><div><div class="gtit">스톡 월 수익</div><div class="glb">목표: 월 100,000원</div></div></div>
+<div class="pt"><div class="pf" id="g1f" style="width:15%"></div></div>
+<div class="pb"><span class="ptx" id="g1t">15,000원</span><span class="pp" id="g1p">15%</span></div>
+<input type="range" class="gsl" min="0" max="100000" step="500" value="15000" oninput="updG(1,this.value)">
+</div>
+<div class="gc">
+<div class="gt"><span class="ge">🏆</span><div><div class="gtit">OGQ 월 수익</div><div class="glb">목표: 월 10,000원</div></div></div>
+<div class="pt"><div class="pf" id="g2f" style="width:50%"></div></div>
+<div class="pb"><span class="ptx" id="g2t">5,000원</span><span class="pp" id="g2p">50%</span></div>
+<input type="range" class="gsl" min="0" max="10000" step="100" value="5000" oninput="updG(2,this.value)">
+</div>
+<div style="font-size:13px;font-weight:700;margin:14px 0 8px;color:var(--text)">🎨 이번 달 작업량</div>
+<div class="gc">
+<div class="gt"><span class="ge">✏️</span><div><div class="gtit">스톡 요소 그린 개수</div><div class="glb">목표: 월 50개</div></div></div>
+<div class="pt"><div class="pf" id="g3f" style="width:0%"></div></div>
+<div class="pb"><span class="ptx" id="g3t">0개</span><span class="pp" id="g3p">0%</span></div>
+<input type="range" class="gsl" min="0" max="50" step="1" value="0" oninput="updG(3,this.value)">
+</div>
+<div style="font-size:13px;font-weight:700;margin:14px 0 8px;color:var(--text)">📦 이번 분기 OGQ 판매 <span style="font-size:11px;font-weight:400;color:var(--text3)">(프로 조건: 분기 500개)</span></div>
+<div class="gc">
+<div class="gt"><span class="ge">🛒</span><div><div class="gtit">분기 판매 개수</div><div class="glb" id="g4-quarter">2분기 (4~6월)</div></div></div>
+<div class="pt"><div class="pf" id="g4f" style="width:2%"></div></div>
+<div class="pb"><span class="ptx" id="g4t">10개 / 500개</span><span class="pp" id="g4p">2%</span></div>
+<input type="range" class="gsl" min="0" max="500" step="1" value="10" oninput="updG(4,this.value)">
+<div style="font-size:11px;color:var(--text3);margin-top:6px" id="g4-tip">프로까지 490개 더 필요해요.</div>
+</div>
+<div style="font-size:13px;font-weight:700;margin:14px 0 8px;color:var(--text)">📊 올해 누적 활동</div>
+<div class="gc">
+<div class="gt"><span class="ge">😊</span><div><div class="gtit">카카오 이모티콘 제안</div><div class="glb">목표: 연 33회</div></div></div>
+<div class="pt"><div class="pf" id="g5f" style="width:0%"></div></div>
+<div class="pb"><span class="ptx" id="g5t">0회</span><span class="pp" id="g5p">0%</span></div>
+<div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+<button class="btn bs" onclick="stepG(5,-1)">−1</button>
+<div style="flex:1;text-align:center;font-size:13px;font-weight:600" id="g5-num">0 / 33회</div>
+<button class="btn bp bs" onclick="stepG(5,1)">+1</button>
+</div>
+</div>
+<div class="gc">
+<div class="gt"><span class="ge">🏅</span><div><div class="gtit">OGQ 이모티콘 제안</div><div class="glb">목표: 연 33회</div></div></div>
+<div class="pt"><div class="pf" id="g6f" style="width:0%"></div></div>
+<div class="pb"><span class="ptx" id="g6t">0회</span><span class="pp" id="g6p">0%</span></div>
+<div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+<button class="btn bs" onclick="stepG(6,-1)">−1</button>
+<div style="flex:1;text-align:center;font-size:13px;font-weight:600" id="g6-num">0 / 33회</div>
+<button class="btn bp bs" onclick="stepG(6,1)">+1</button>
+</div>
+</div>
+<div class="gc">
+<div class="gt"><span class="ge">📱</span><div><div class="gtit">릴스 업로드</div><div class="glb">목표: 연 66회 (주 2회)</div></div></div>
+<div class="pt"><div class="pf" id="g7f" style="width:0%"></div></div>
+<div class="pb"><span class="ptx" id="g7t">0회</span><span class="pp" id="g7p">0%</span></div>
+<div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+<button class="btn bs" onclick="stepG(7,-1)">−1</button>
+<div style="flex:1;text-align:center;font-size:13px;font-weight:600" id="g7-num">0 / 66회</div>
+<button class="btn bp bs" onclick="stepG(7,1)">+1</button>
+</div>
+</div>
+<div class="gc">
+<div class="gt"><span class="ge">🗂</span><div><div class="gtit">스톡 템플릿 제작</div><div class="glb">목표: 연 33개</div></div></div>
+<div class="pt"><div class="pf" id="g8f" style="width:0%"></div></div>
+<div class="pb"><span class="ptx" id="g8t">0개</span><span class="pp" id="g8p">0%</span></div>
+<div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+<button class="btn bs" onclick="stepG(8,-1)">−1</button>
+<div style="flex:1;text-align:center;font-size:13px;font-weight:600" id="g8-num">0 / 33개</div>
+<button class="btn bp bs" onclick="stepG(8,1)">+1</button>
+</div>
+</div>
+</div>
 </div>
 
-</div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -323,10 +292,10 @@ let plan=lLS('plan',[]);
 let taskSt=lLS('tst',{});
 let evts=lLS('evts',[]);
 let goals=lLS('goals',{1:15000,2:5000,3:0,4:10,5:0,6:0,7:0,8:0});
-let weekLogs=lLS('weekLogs',[]); // 주간 기록 누적
+let weekLogs=lLS('weekLogs',[]);
+
 const DAYS=['월','화','수','목','금'];
 
-// ── 탭 ──
 function sw(tab){
   const ids=['today','paste','records','goals'];
   document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',ids[i]===tab));
@@ -337,12 +306,10 @@ function sw(tab){
   if(tab==='records')renderRecords();
 }
 
-// ── 날짜 유틸 ──
 function getMon(off){const d=new Date();const dy=d.getDay()||7;d.setDate(d.getDate()-(dy-1)+off*7);d.setHours(0,0,0,0);return d}
 function fmtD(d){return`${d.getMonth()+1}/${d.getDate()}`}
 function fmtYMD(d){return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
 
-// ── 이벤트 ──
 function togEv(){document.getElementById('ev-form').classList.toggle('open')}
 function addEv(){
   const nm=document.getElementById('ev-nm').value.trim();
@@ -359,11 +326,10 @@ function renderEvList(){
   el.innerHTML=evts.map(e=>`<div class="evi"><div><div class="evnm">📌 ${e.name}</div><div class="evmt">${DAYS[e.day]}요일 · ${e.min}분${e.memo?' · '+e.memo:''}</div></div><button class="btn bd bs" onclick="delEv('${e.id}')">삭제</button></div>`).join('')
 }
 
-// ── 붙여넣기 파싱 ──
 function parsePaste(){
   const raw=document.getElementById('paste-area').value.trim();
   if(!raw){alert('클로드 계획을 붙여넣어 주세요');return}
-  saveWeekLog(); // 이전 주 기록 저장
+  saveWeekLog();
   const lines=raw.split('\n');
   const dayMap={'월':0,'화':1,'수':2,'목':3,'금':4};
   const np=[{day:'월',avail:120,used:0,tasks:[]},{day:'화',avail:120,used:0,tasks:[]},{day:'수',avail:180,used:0,tasks:[]},{day:'목',avail:120,used:0,tasks:[]},{day:'금',avail:120,used:0,tasks:[]}];
@@ -393,10 +359,9 @@ function parsePaste(){
   renderPlan();
   document.getElementById('paste-area').value='';
   document.getElementById('paste-preview').innerHTML=`<div style="padding:12px;background:var(--bg2);border-radius:var(--r);font-size:13px;color:var(--text2);text-align:center">✅ ${total}개 할일이 주간계획에 등록됐어요!</div>`;
-  toast('계획 등록 완료! 주간계획 탭 확인하세요');
+  toast('계획 등록 완료!');
 }
 
-// ── 주간 기록 저장 ──
 function saveWeekLog(){
   if(!plan.length)return;
   const allTasks=plan.flatMap(d=>d.tasks);
@@ -404,7 +369,7 @@ function saveWeekLog(){
   if(total===0)return;
   const done=allTasks.filter(t=>!!taskSt[t.id]);
   if(done.length===0)return;
-  const mon=getMon(0); // 현재 주 월요일
+  const mon=getMon(0);
   const weekKey=fmtYMD(mon);
   if(weekLogs.find(w=>w.weekStart===weekKey))return;
   const catCount={stock:0,emo:0,insta:0,event:0};
@@ -421,7 +386,6 @@ function saveWeekLog(){
   sLS('weekLogs',weekLogs);
 }
 
-// ── 기록·성과 탭 ──
 function renderRecords(){
   const sel=document.getElementById('year-sel');
   const years=[...new Set(weekLogs.map(w=>w.year))].sort((a,b)=>b-a);
@@ -431,8 +395,6 @@ function renderRecords(){
   const yr=parseInt(sel.value)||curYear;
   const logs=weekLogs.filter(w=>w.year===yr);
   const el=document.getElementById('rec-body');
-
-  // 소요시간 패턴 분석 (현재 주 plan에서)
   const actualData={};
   plan.forEach(d=>d.tasks.forEach(t=>{
     if(t.actual&&t.actual>0){
@@ -444,51 +406,25 @@ function renderRecords(){
   const totalActual=Object.values(actualData).flat().length;
   const weeksRecorded=logs.length;
   const weeksLeft=Math.max(0,6-weeksRecorded);
-
-  // 소요시간 섹션 항상 표시
   let html=`<div style="background:var(--bg2);border-radius:var(--rl);padding:14px;margin-bottom:14px">
-    <div style="font-size:13px;font-weight:700;margin-bottom:8px">⏱ 실제 소요시간 기록 현황</div>`;
-
+  <div style="font-size:13px;font-weight:700;margin-bottom:8px">⏱ 실제 소요시간 기록 현황</div>`;
   if(totalActual===0&&weeksRecorded===0){
-    html+=`<div style="font-size:12px;color:var(--text2);line-height:1.8">
-      아직 기록이 없어요 🌱<br>
-      할일 완료 후 <b>실제 걸린 시간</b>을 입력하면<br>
-      6주 후 클로드가 패턴을 분석해드려요!<br><br>
-      <span style="font-size:11px;color:var(--text3)">목표: 6주 기록 → 클로드 패턴 분석 → 더 정확한 계획</span>
-    </div>`;
+    html+=`<div style="font-size:12px;color:var(--text2);line-height:1.8">아직 기록이 없어요 🌱<br>할일 완료 후 <b>실제 걸린 시간</b>을 입력하면<br>6주 후 클로드가 패턴을 분석해드려요!</div>`;
   } else {
-    // 진행 바
     const prog=Math.min(100,Math.round(weeksRecorded/6*100));
     html+=`<div style="font-size:12px;color:var(--text2);margin-bottom:8px">${weeksRecorded}주 기록 완료 ${weeksLeft>0?`· <b>${weeksLeft}주 더</b> 쌓으면 패턴 분석 가능`:'· <b>분석 준비 완료! 🎉</b>'}</div>
     <div style="height:6px;background:var(--bg3);border-radius:3px;margin-bottom:10px;overflow:hidden"><div style="height:100%;border-radius:3px;background:var(--ke);width:${prog}%"></div></div>`;
-
     if(totalActual>0){
       html+=`<div style="font-size:12px;font-weight:600;margin-bottom:6px;color:var(--text)">이번 주 기록된 소요시간</div>`;
       Object.entries(actualData).forEach(([cat,items])=>{
         const[,lbl]=tagL(cat);
         const avg=Math.round(items.reduce((s,i)=>s+i.actual,0)/items.length);
-        html+=`<div style="font-size:12px;color:var(--text2);margin-bottom:4px">
-          <span class="tag tg-${cat==='stock'?'s':cat==='emo'?'e':cat==='insta'?'i':'v'}">${lbl}</span>
-          평균 <b>${avg}분</b> (${items.length}개 작업)
-        </div>`;
+        html+=`<div style="font-size:12px;color:var(--text2);margin-bottom:4px"><span class="tag tg-${cat==='stock'?'s':cat==='emo'?'e':cat==='insta'?'i':'v'}">${lbl}</span> 평균 <b>${avg}분</b> (${items.length}개 작업)</div>`;
       });
-    }
-
-    if(weeksLeft===0){
-      html+=`<div style="margin-top:10px;padding:10px;background:var(--bg);border:1px solid var(--ke);border-radius:var(--r);font-size:12px;line-height:1.7;color:var(--text2)">
-        🎯 <b>클로드에게 이렇게 말해보세요</b><br>
-        "6주 동안 플래너 썼어. 스톡 스케치 평균 ○분, 채색 평균 ○분, 이모티콘 시안 평균 ○분 걸렸어. 이 패턴으로 이번 주 계획 짜줘."
-      </div>`;
     }
   }
   html+=`</div>`;
-
-  if(!logs.length){
-    html+='<div class="no-rec">아직 주간 기록이 없어요 🌱<br>매주 할일을 체크하면<br>여기에 성과가 쌓여요!</div>';
-    el.innerHTML=html;return;
-  }
-
-  // 총계
+  if(!logs.length){html+='<div class="no-rec">아직 주간 기록이 없어요 🌱<br>매주 할일을 체크하면<br>여기에 성과가 쌓여요!</div>';el.innerHTML=html;return}
   const totDone=logs.reduce((s,w)=>s+w.done,0);
   const totTotal=logs.reduce((s,w)=>s+w.total,0);
   const avgPct=Math.round(logs.reduce((s,w)=>s+w.pct,0)/logs.length);
@@ -498,45 +434,33 @@ function renderRecords(){
   for(let m=1;m<=12;m++)byMonth[m]=0;
   logs.forEach(w=>{byMonth[w.month]=(byMonth[w.month]||0)+w.done});
   const maxMonth=Math.max(...Object.values(byMonth),1);
-
-  html+=`
-  <div class="rec-summary">
-    <div class="rec-card"><div class="rec-num">${totDone}</div><div class="rec-lbl">총 완료 할일</div><div class="rec-sub">${logs.length}주 기록</div></div>
-    <div class="rec-card"><div class="rec-num">${avgPct}%</div><div class="rec-lbl">평균 달성률</div><div class="rec-sub">전체 ${totTotal}개 중</div></div>
+  html+=`<div class="rec-summary">
+  <div class="rec-card"><div class="rec-num">${totDone}</div><div class="rec-lbl">총 완료 할일</div><div class="rec-sub">${logs.length}주 기록</div></div>
+  <div class="rec-card"><div class="rec-num">${avgPct}%</div><div class="rec-lbl">평균 달성률</div><div class="rec-sub">전체 ${totTotal}개 중</div></div>
   </div>
   <div class="cat-row">
-    <div class="cat-card"><div class="cat-n" style="color:var(--cc)">${catTot.stock}</div><div class="cat-l">스톡</div></div>
-    <div class="cat-card"><div class="cat-n" style="color:var(--ec)">${catTot.emo}</div><div class="cat-l">이모티콘</div></div>
-    <div class="cat-card"><div class="cat-n" style="color:var(--ic)">${catTot.insta}</div><div class="cat-l">인스타툰</div></div>
+  <div class="cat-card"><div class="cat-n" style="color:var(--cc)">${catTot.stock}</div><div class="cat-l">스톡</div></div>
+  <div class="cat-card"><div class="cat-n" style="color:var(--ec)">${catTot.emo}</div><div class="cat-l">이모티콘</div></div>
+  <div class="cat-card"><div class="cat-n" style="color:var(--ic)">${catTot.insta}</div><div class="cat-l">인스타툰</div></div>
   </div>
   <div class="month-chart"><div class="mc-title">월별 완료 할일 수</div>`;
   const mNames=['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
   for(let m=1;m<=12;m++){
     const cnt=byMonth[m]||0;
     const w=cnt?Math.max(8,Math.round(cnt/maxMonth*100)):0;
-    html+=`<div class="mc-row">
-      <div class="mc-label">${mNames[m-1]}</div>
-      <div class="mc-bar-wrap"><div class="mc-bar" style="width:${w}%">${cnt>0?`<span class="mc-bar-txt">${cnt}</span>`:''}</div></div>
-      <div class="mc-count">${cnt}</div>
-    </div>`;
+    html+=`<div class="mc-row"><div class="mc-label">${mNames[m-1]}</div><div class="mc-bar-wrap"><div class="mc-bar" style="width:${w}%">${cnt>0?`<span class="mc-bar-txt">${cnt}</span>`:''}</div></div><div class="mc-count">${cnt}</div></div>`;
   }
   html+=`</div>`;
-
   const recent=[...logs].sort((a,b)=>b.weekStart.localeCompare(a.weekStart)).slice(0,8);
   html+=`<div class="week-records"><div class="wr-title">최근 주간 기록</div>`;
   for(const w of recent){
     const d=new Date(w.weekStart);const fe=new Date(d);fe.setDate(fe.getDate()+4);
-    html+=`<div class="wr-item">
-      <div class="wr-week">${fmtD(d)} ~ ${fmtD(fe)} <span style="font-size:11px;color:var(--text3);margin-left:4px">${w.pct}% 달성</span></div>
-      <div class="wr-meta">완료 ${w.done}/${w.total}개 · 스톡 ${w.cats.stock||0} / 이모티콘 ${w.cats.emo||0} / 인스타 ${w.cats.insta||0}</div>
-      ${w.tasks.length?`<div class="wr-tasks">${w.tasks.slice(0,3).join(' · ')}${w.tasks.length>3?' 외 '+(w.tasks.length-3)+'개':''}</div>`:''}
-    </div>`;
+    html+=`<div class="wr-item"><div class="wr-week">${fmtD(d)} ~ ${fmtD(fe)} <span style="font-size:11px;color:var(--text3);margin-left:4px">${w.pct}% 달성</span></div><div class="wr-meta">완료 ${w.done}/${w.total}개 · 스톡 ${w.cats.stock||0} / 이모티콘 ${w.cats.emo||0} / 인스타 ${w.cats.insta||0}</div>${w.tasks.length?`<div class="wr-tasks">${w.tasks.slice(0,3).join(' · ')}${w.tasks.length>3?' 외 '+(w.tasks.length-3)+'개':''}</div>`:''}</div>`;
   }
   html+=`</div>`;
   el.innerHTML=html;
 }
 
-// ── 계획 렌더링 ──
 function tagL(t){if(t==='stock')return['tg-s','스톡'];if(t==='emo')return['tg-e','이모티콘'];if(t==='insta')return['tg-i','인스타툰'];if(t==='event')return['tg-v','이벤트'];return['','']}
 
 function renderPlan(){
@@ -550,23 +474,21 @@ function renderPlan(){
     for(const t of d.tasks){
       const done=!!taskSt[t.id];
       const kc=t.kwt==='e'?' kwe':t.kwt==='t'?' kwt':'';
-      const ec=t.iev?' iev':'';
-      html+=`<div class="ti${done?' done':''}${kc}${ec}" id="ti-${t.id}">
-        <div class="chk" onclick="togD('${t.id}')">${done?'✓':''}</div>
-        <div class="tb">
-          <div class="tx" id="tx-${t.id}" ondblclick="startEd('${t.id}')">${t.tx}</div>
-          <div class="tmeta">`;
+      html+=`<div class="ti${done?' done':''}${kc}" id="ti-${t.id}">
+      <div class="chk" onclick="togD('${t.id}')">${done?'✓':''}</div>
+      <div class="tb"><div class="tx" id="tx-${t.id}" ondblclick="startEd('${t.id}')">${t.tx}</div>
+      <div class="tmeta">`;
       for(const tg of t.tags){const[c,l]=tagL(tg);if(l)html+=`<span class="tag ${c}">${l}</span>`}
       const hasActual=t.actual&&t.actual>0;
       html+=`<span class="tmin">예상 ${t.min}분</span></div>
-          <div class="actual-row">
-            <span class="actual-label">실제 소요:</span>
-            <input class="actual-inp${hasActual?' filled':''}" type="number" min="1" max="480" placeholder="?" value="${hasActual?t.actual:''}" onclick="event.stopPropagation()" onchange="setActual('${t.id}',this.value)" id="act-${t.id}">
-            <span class="actual-unit">분</span>
-            ${hasActual?`<span style="font-size:10px;color:var(--ke)">✓ 기록됨</span>`:''}
-          </div>
-          <div class="tact"><button class="btn bs" onclick="startEd('${t.id}')">수정</button><button class="btn bd bs" onclick="delT('${t.id}')">삭제</button></div>
-        </div></div>`;
+      <div class="actual-row">
+      <span class="actual-label">실제 소요:</span>
+      <input class="actual-inp${hasActual?' filled':''}" type="number" min="1" max="480" placeholder="?" value="${hasActual?t.actual:''}" onclick="event.stopPropagation()" onchange="setActual('${t.id}',this.value)" id="act-${t.id}">
+      <span class="actual-unit">분</span>
+      ${hasActual?`<span style="font-size:10px;color:var(--ke)">✓ 기록됨</span>`:''}
+      </div>
+      <div class="tact"><button class="btn bs" onclick="startEd('${t.id}')">수정</button><button class="btn bd bs" onclick="delT('${t.id}')">삭제</button></div>
+      </div></div>`;
     }
     html+=`<button class="add-tb" onclick="addT('${d.day}')">+ 할일 추가</button></div>`;
   }
@@ -598,7 +520,6 @@ function addT(dn){
   sLS('plan',plan);renderPlan();setTimeout(()=>startEd(id),50);
 }
 
-// ── 오늘 탭 ──
 function renderToday(){
   const now=new Date();const dow=now.getDay();
   const di=dow===0?-1:dow-1;
@@ -614,30 +535,29 @@ function renderToday(){
   for(const t of d.tasks){
     const done=!!taskSt[t.id];
     const kc=t.kwt==='e'?' kwe':t.kwt==='t'?' kwt':'';
-    const ec=t.iev?' iev':'';
-    html+=`<div class="ti${done?' done':''}${kc}${ec}" onclick="togDT('${t.id}')">
-      <div class="chk">${done?'✓':''}</div>
-      <div class="tb"><div class="tx">${t.tx}</div>
-        <div class="tmeta">`;
+    html+=`<div class="ti${done?' done':''}${kc}" onclick="togDT('${t.id}')">
+    <div class="chk">${done?'✓':''}</div>
+    <div class="tb"><div class="tx">${t.tx}</div>
+    <div class="tmeta">`;
     for(const tg of t.tags){const[c,l]=tagL(tg);if(l)html+=`<span class="tag ${c}">${l}</span>`}
     const hasA=t.actual&&t.actual>0;
     html+=`<span class="tmin">예상 ${t.min}분</span></div>
-        <div class="actual-row">
-          <span class="actual-label">실제 소요:</span>
-          <input class="actual-inp${hasA?' filled':''}" type="number" min="1" max="480" placeholder="?" value="${hasA?t.actual:''}" onclick="event.stopPropagation()" onchange="setActual('${t.id}',this.value)" id="act-${t.id}">
-          <span class="actual-unit">분</span>
-          ${hasA?`<span style="font-size:10px;color:var(--ke)">✓</span>`:''}
-        </div>
-      </div></div>`;
+    <div class="actual-row">
+    <span class="actual-label">실제 소요:</span>
+    <input class="actual-inp${hasA?' filled':''}" type="number" min="1" max="480" placeholder="?" value="${hasA?t.actual:''}" onclick="event.stopPropagation()" onchange="setActual('${t.id}',this.value)" id="act-${t.id}">
+    <span class="actual-unit">분</span>
+    ${hasA?`<span style="font-size:10px;color:var(--ke)">✓</span>`:''}
+    </div>
+    </div></div>`;
   }
   el.innerHTML=html;updSt(d.tasks);
 }
+
 function setActual(id,val){
   val=parseInt(val);if(!val||val<1)return;
   const t=getT(id);if(!t)return;
   t.actual=val;
   sLS('plan',plan);
-  // 입력칸 스타일 업데이트
   const inp=document.getElementById('act-'+id);
   if(inp)inp.classList.add('filled');
   toast('실제 소요시간 기록됨 ✓');
@@ -655,8 +575,6 @@ function updSt(tasks){
   document.getElementById('sp').textContent=pct+'%';
 }
 
-// ── 목표 ──
-// 1:스톡수익 2:OGQ수익 3:스톡요소 4:OGQ분기판매 5:카카오제안 6:OGQ제안 7:릴스 8:템플릿
 function renderGoals(){for(const[k,v]of Object.entries(goals))updG(parseInt(k),v,true)}
 function updG(g,val,silent){
   val=parseInt(val);goals[g]=val;if(!silent)sLS('goals',goals);
@@ -690,8 +608,52 @@ function stepG(g,dir){
   updG(g,nv);toast(dir>0?'+1 기록됨!':'−1 취소됨');
 }
 
-// ── 구글 시트 동기화 ──
+// ── 구글 시트 동기화 (읽기 좋은 형태로 저장) ──
 const GS_URL='https://script.google.com/macros/s/AKfycbyaq5q1kAycmn0wAJWYyZvnUW7eEosyWzlSopvP56gfpobF9oZ03bgh4gFZgg6aUJwQHQ/exec';
+
+// 시트에 저장할 때 사람이 읽기 좋게 펼쳐서 보내기
+function buildSheetPayload(){
+  // 목표 데이터: 항목별 행으로
+  const goalsRows=[
+    ['항목','현재값','목표값','달성률'],
+    ['스톡 월수익(원)', goals[1], 100000, Math.round(goals[1]/100000*100)+'%'],
+    ['OGQ 월수익(원)', goals[2], 10000, Math.round(goals[2]/10000*100)+'%'],
+    ['스톡 요소(개/월)', goals[3], 50, Math.round(goals[3]/50*100)+'%'],
+    ['OGQ 분기판매(개)', goals[4], 500, Math.round(goals[4]/500*100)+'%'],
+    ['카카오 제안(회)', goals[5], 33, Math.round(goals[5]/33*100)+'%'],
+    ['OGQ 제안(회)', goals[6], 33, Math.round(goals[6]/33*100)+'%'],
+    ['릴스 업로드(회)', goals[7], 66, Math.round(goals[7]/66*100)+'%'],
+    ['스톡 템플릿(개)', goals[8], 33, Math.round(goals[8]/33*100)+'%'],
+  ];
+
+  // 주간기록: 날짜·달성률·카테고리별 열로
+  const weekRows=[['주간시작','연도','월','완료','전체','달성률(%)','스톡','이모티콘','인스타툰','이벤트','완료작업(일부)']];
+  for(const w of weekLogs){
+    weekRows.push([
+      w.weekStart, w.year, w.month,
+      w.done, w.total, w.pct,
+      w.cats.stock||0, w.cats.emo||0, w.cats.insta||0, w.cats.event||0,
+      (w.tasks||[]).slice(0,3).join(' / ')
+    ]);
+  }
+
+  // 현재 주 계획: 요일·할일·태그·예상·실제 시간
+  const planRows=[['요일','할일내용','유형','예상시간(분)','실제시간(분)','완료여부']];
+  for(const d of plan){
+    for(const t of d.tasks){
+      planRows.push([
+        d.day+'요일',
+        t.tx,
+        t.tags[0]||'stock',
+        t.min,
+        t.actual||'',
+        taskSt[t.id]?'완료':'미완료'
+      ]);
+    }
+  }
+
+  return {type:'saveReadable', goalsRows, weekRows, planRows};
+}
 
 async function syncSave(){
   const syncEl=document.getElementById('sync-status');
@@ -701,7 +663,7 @@ async function syncSave(){
       method:'POST',
       mode:'no-cors',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({type:'saveAll',weekLogs,goals,plan,taskSt})
+      body:JSON.stringify(buildSheetPayload())
     });
     if(syncEl){syncEl.textContent='☁️ 저장됨 ✓';syncEl.style.color='var(--ke)'}
     sLS('lastSync',new Date().toLocaleString('ko-KR'));
@@ -731,24 +693,19 @@ async function syncLoad(){
   }
 }
 
-// 데이터 변경시 자동 저장 (3초 디바운스)
 let syncTimer;
 function autoSync(){clearTimeout(syncTimer);syncTimer=setTimeout(syncSave,3000)}
 
-// ── 토스트 ──
 let tTimer;
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(tTimer);tTimer=setTimeout(()=>t.classList.remove('show'),2200)}
 
-// ── 초기화 ──
 renderEvList();
 if(plan.length)renderPlan();
 renderGoals();
 renderToday();
-// 연도 선택 초기화
 const yrSel=document.getElementById('year-sel');
 const curYr=new Date().getFullYear();
 yrSel.innerHTML=`<option value="${curYr}">${curYr}년</option>`;
-// 앱 시작시 구글 시트에서 불러오기
 syncLoad();
 </script>
 </body>
