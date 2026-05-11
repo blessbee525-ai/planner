@@ -342,7 +342,7 @@ function parsePaste(){
     const tr=line.trim();if(!tr)continue;
     for(const[k,v]of Object.entries(dayMap)){if(tr.startsWith(k)||tr.includes(k+'요일')){cur=v;break}}
     if(cur>=0&&(tr.startsWith('-')||tr.startsWith('•')||tr.startsWith('·')||/^\d+\./.test(tr)||/^\[/.test(tr))){
-      let tx=tr.replace(/^[-•·\d+\.]\s*/,'').trim();
+      let tx=tr.replace(/^[-•·\d+\.]\s*/,'').replace(/\*\*/g,'').trim();
       let min=30;const mm=tx.match(/약\s*(\d+)\s*분/)||tx.match(/(\d+)\s*분/);if(mm)min=parseInt(mm[1]);
       let tags=['stock'];
       if(/이모티콘|카카오|ogq|OGQ/i.test(tx))tags=['emo'];
