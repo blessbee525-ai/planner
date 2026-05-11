@@ -1,45 +1,712 @@
-function doGet(e) {
-  try {
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const sheet = ss.getSheetByName('플래너 기록');
-    if (!sheet) return respond({ok:true,data:{}});
-    const rows = sheet.getRange(2,1,Math.max(1,sheet.getLastRow()-1),3).getValues();
-    const result = {};
-    for (const [,type,dataStr] of rows) {
-      try { if(type&&dataStr) result[type]=JSON.parse(dataStr); } catch(e){}
-    }
-    return respond({ok:true,data:result});
-  } catch(e) { return respond({ok:false,error:e.message}); }
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>🎨 그림 수익화 플래너</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+--bg:#fff;--bg2:#f7f6f3;--bg3:#eeede8;
+--text:#1a1a1a;--text2:#666;--text3:#aaa;
+--border:#e5e4de;--border2:#ccc;
+--accent:#1a1a1a;--accent-inv:#fff;
+--r:10px;--rl:14px;
+--cs:#E1F5EE;--cc:#085041;
+--es:#EEEDFE;--ec:#3C3489;
+--is:#FAEEDA;--ic:#854F0B;
+--vs:#FBE8F0;--vc:#72243E;
+--ke:#5DCAA5;--kt:#AFA9EC;
+}
+@media(prefers-color-scheme:dark){:root{
+--bg:#1c1c1e;--bg2:#2c2c2e;--bg3:#3a3a3c;
+--text:#f0f0f0;--text2:#aaa;--text3:#555;
+--border:#3a3a3c;--border2:#555;
+--accent:#f0f0f0;--accent-inv:#1c1c1e;
+--cs:#04342C;--cc:#9FE1CB;--es:#26215C;--ec:#CECBF6;
+--is:#412402;--ic:#FAC775;--vs:#4B1528;--vc:#F4C0D1;
+}}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Noto Sans KR',sans-serif;font-size:15px;min-height:100vh}
+.topbar{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);padding:12px 16px 0}
+.topbar-title{font-size:16px;font-weight:700;margin-bottom:10px}
+.tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex-shrink:0;padding:8px 11px;font-size:12px;font-weight:500;color:var(--text2);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap}
+.tab.active{color:var(--text);border-bottom-color:var(--text)}
+.content{padding:14px;padding-bottom:60px}
+.sec{display:none}.sec.active{display:block}
+.btn{padding:7px 13px;font-size:13px;border:1px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--text);cursor:pointer}
+.btn:active{opacity:0.7}
+.bp{background:var(--accent);color:var(--accent-inv);border-color:var(--accent)}
+.bs{padding:4px 10px;font-size:12px;border-radius:7px}
+.bd{background:#FCEBEB;color:#A32D2D;border-color:#F09595}
+.fb{width:100%;padding:12px;font-size:14px;font-weight:700;background:var(--accent);color:var(--accent-inv);border:none;border-radius:var(--r);cursor:pointer;margin-bottom:12px}
+.fb:active{opacity:0.8}
+.tag{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:600;white-space:nowrap}
+.tg-s{background:var(--cs);color:var(--cc)}
+.tg-e{background:var(--es);color:var(--ec)}
+.tg-i{background:var(--is);color:var(--ic)}
+.tg-v{background:var(--vs);color:var(--vc)}
+.ti{display:flex;align-items:flex-start;gap:9px;padding:10px 12px;background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--r);margin-bottom:5px;cursor:pointer}
+.ti.kwe{border-left:3px solid var(--ke)}
+.ti.kwt{border-left:3px solid var(--kt)}
+.ti.iev{border-left:3px solid #D4537E}
+.ti.done{opacity:0.45}
+.ti.done .tx{text-decoration:line-through}
+.chk{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--border2);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--accent-inv)}
+.ti.done .chk{background:var(--accent);border-color:var(--accent)}
+.tb{flex:1;min-width:0}
+.tx{font-size:13px;line-height:1.45;color:var(--text);word-break:keep-all}
+.txinp{width:100%;font-size:13px;padding:3px 6px;border:1px solid var(--border2);border-radius:6px;background:var(--bg);color:var(--text);resize:none}
+.tmeta{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;align-items:center}
+.tmin{font-size:11px;color:var(--text3)}
+.tact{display:flex;gap:4px;margin-top:5px}
+.add-tb{width:100%;padding:7px;font-size:12px;color:var(--text2);background:none;border:1px dashed var(--border2);border-radius:var(--r);cursor:pointer;margin-top:4px}
+.actual-row{display:flex;align-items:center;gap:6px;margin-top:5px}
+.actual-label{font-size:11px;color:var(--text2);white-space:nowrap}
+.actual-inp{width:52px;font-size:12px;font-weight:600;text-align:center;padding:3px 4px;border:1px solid var(--border2);border-radius:6px;background:var(--bg);color:var(--text)}
+.actual-inp.filled{border-color:var(--ke);color:var(--cc)}
+.actual-unit{font-size:11px;color:var(--text3)}
+.sr{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.sc{background:var(--bg2);border-radius:var(--r);padding:10px;text-align:center}
+.sn{font-size:22px;font-weight:700}
+.sl{font-size:11px;color:var(--text2);margin-top:2px}
+.wn{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.wl{font-size:13px;font-weight:600}
+.dg{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:12px}
+.dc{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:7px 3px;text-align:center}
+.dc .dn{font-size:11px;color:var(--text2);margin-bottom:4px}
+.dc input{width:100%;font-size:13px;font-weight:700;text-align:center;border:1px solid var(--border);border-radius:6px;padding:3px 1px;background:var(--bg);color:var(--text)}
+.dc span{font-size:10px;color:var(--text3)}
+.evbox{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:12px;margin-bottom:12px}
+.evtit{font-size:13px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
+.evi{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:9px 11px;margin-bottom:6px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.evnm{font-size:13px;font-weight:600}
+.evmt{font-size:11px;color:var(--text2);margin-top:2px}
+.evfm{display:none;background:var(--bg);border:1px dashed var(--border2);border-radius:var(--r);padding:10px;margin-top:6px}
+.evfm.open{display:block}
+.fl{display:flex;flex-direction:column;gap:5px;margin-bottom:8px}
+.fl label{font-size:11px;color:var(--text2)}
+.fl input,.fl select{font-size:13px;padding:7px 9px;border:1px solid var(--border);border-radius:7px;background:var(--bg);color:var(--text);width:100%}
+.fa{display:flex;gap:6px}
+.pg{background:var(--bg2);border-radius:var(--rl);padding:14px;margin-bottom:12px;font-size:13px;line-height:1.8;color:var(--text2)}
+.pg b{color:var(--text)}
+.pa{width:100%;min-height:150px;font-size:13px;padding:10px;border:1px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--text);resize:vertical;line-height:1.6;margin-bottom:10px}
+.rec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.rec-title{font-size:15px;font-weight:700}
+.year-sel{font-size:13px;padding:5px 8px;border:1px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--text)}
+.rec-summary{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px}
+.rec-card{background:var(--bg2);border-radius:var(--rl);padding:14px;text-align:center}
+.rec-num{font-size:26px;font-weight:700;color:var(--text)}
+.rec-lbl{font-size:11px;color:var(--text2);margin-top:3px}
+.rec-sub{font-size:12px;color:var(--text3);margin-top:2px}
+.cat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.cat-card{background:var(--bg2);border-radius:var(--r);padding:12px;text-align:center}
+.cat-n{font-size:20px;font-weight:700}
+.cat-l{font-size:11px;color:var(--text2);margin-top:2px}
+.month-chart{margin-bottom:16px}
+.mc-title{font-size:13px;font-weight:600;margin-bottom:8px}
+.mc-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.mc-label{font-size:12px;color:var(--text2);width:24px;flex-shrink:0}
+.mc-bar-wrap{flex:1;background:var(--bg3);border-radius:3px;height:18px;overflow:hidden}
+.mc-bar{height:100%;background:var(--accent);border-radius:3px;transition:width 0.4s;display:flex;align-items:center;justify-content:flex-end;padding-right:5px}
+.mc-bar-txt{font-size:10px;color:var(--accent-inv);font-weight:600;white-space:nowrap}
+.mc-count{font-size:11px;color:var(--text3);width:28px;text-align:right;flex-shrink:0}
+.week-records{margin-bottom:16px}
+.wr-title{font-size:13px;font-weight:600;margin-bottom:8px}
+.wr-item{background:var(--bg2);border-radius:var(--r);padding:10px 12px;margin-bottom:6px}
+.wr-week{font-size:12px;font-weight:600;color:var(--text)}
+.wr-meta{font-size:11px;color:var(--text2);margin-top:3px}
+.wr-tasks{font-size:11px;color:var(--text3);margin-top:4px;line-height:1.6}
+.no-rec{text-align:center;padding:2.5rem 1rem;color:var(--text3);font-size:13px;line-height:1.9}
+.gc{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:14px;margin-bottom:12px}
+.gt{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.ge{font-size:22px}
+.gtit{font-size:11px;color:var(--text2)}
+.glb{font-size:14px;font-weight:700}
+.pt{height:6px;background:var(--bg3);border-radius:3px;margin-bottom:5px;overflow:hidden}
+.pf{height:100%;border-radius:3px;background:var(--accent);transition:width 0.3s}
+.pb{display:flex;justify-content:space-between}
+.ptx{font-size:12px;color:var(--text2)}
+.pp{font-size:12px;font-weight:700}
+.gsl{width:100%;margin-top:10px;accent-color:var(--accent)}
+.pdh{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;margin-top:14px}
+.pdn{font-size:14px;font-weight:700}
+.pdm{font-size:11px;color:var(--text3)}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--accent);color:var(--accent-inv);padding:9px 20px;border-radius:24px;font-size:13px;font-weight:600;opacity:0;transition:opacity 0.25s;pointer-events:none;white-space:nowrap;z-index:9999}
+.toast.show{opacity:1}
+.empty-st{text-align:center;padding:2.5rem 1rem;color:var(--text3);font-size:13px;line-height:1.9}
+</style>
+</head>
+<body>
+<div class="topbar">
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+<div class="topbar-title">🎨 그림 수익화 플래너</div>
+<div style="display:flex;align-items:center;gap:8px">
+<span id="sync-status" style="font-size:11px;color:var(--text3)">☁️ 연결 중...</span>
+<button onclick="syncLoad()" style="font-size:11px;padding:3px 8px;border:1px solid var(--border2);border-radius:6px;background:var(--bg);color:var(--text2);cursor:pointer">새로고침</button>
+</div>
+</div>
+<div class="tabs">
+<button class="tab active" onclick="sw('today')">오늘</button>
+<button class="tab" onclick="sw('paste')">계획붙여넣기</button>
+<button class="tab" onclick="sw('records')">기록·성과</button>
+<button class="tab" onclick="sw('goals')">목표</button>
+</div>
+</div>
+
+<div class="content">
+<!-- 오늘 -->
+<div id="s-today" class="sec active">
+<div class="sr">
+<div class="sc"><div class="sn" id="sd">0</div><div class="sl">완료</div></div>
+<div class="sc"><div class="sn" id="st">0</div><div class="sl">전체</div></div>
+<div class="sc"><div class="sn" id="sp">0%</div><div class="sl">달성률</div></div>
+</div>
+<div style="font-size:12px;color:var(--text2);margin-bottom:10px" id="today-label"></div>
+<div id="today-list"></div>
+</div>
+
+<!-- 계획붙여넣기 -->
+<div id="s-paste" class="sec">
+<div class="pg">
+<b>📋 클로드 프로젝트에서 계획 받는 법</b><br>
+프로젝트에서 새 대화 열고 이렇게 요청하세요<br><br>
+<b>"이번 주 계획 짜줘.</b><br>
+월 2시간, 화 2시간, 수 3시간, 목 2시간, 금 1시간.<br>
+이번 주 수요일에 그라폴리오 작업 90분 있어."
+</div>
+<div class="evbox" style="margin-bottom:12px">
+<div class="evtit"><span>📌 이번 주 특별 작업</span><button class="btn bs" onclick="togEv()">+ 추가</button></div>
+<div id="ev-list"><div style="font-size:12px;color:var(--text3);text-align:center;padding:4px 0">그라폴리오·공모전 등은 클로드에게 직접 말하거나 여기 추가하세요</div></div>
+<div class="evfm" id="ev-form">
+<div class="fl"><label>작업 이름</label><input id="ev-nm" placeholder="예: 그라폴리오 일러스트, 봄 공모전"></div>
+<div class="fl"><label>요일</label>
+<select id="ev-dy"><option value="0">월요일</option><option value="1">화요일</option><option value="2">수요일</option><option value="3">목요일</option><option value="4">금요일</option></select>
+</div>
+<div class="fl"><label>예상 시간(분)</label><input id="ev-mn" type="number" value="90" min="10" max="480" step="10"></div>
+<div class="fl"><label>메모(선택)</label><input id="ev-mo" placeholder="예: 마감 5/31, 주제: 여름"></div>
+<div class="fa"><button class="btn bp bs" style="flex:1" onclick="addEv()">추가</button><button class="btn bs" onclick="togEv()">취소</button></div>
+</div>
+</div>
+<textarea class="pa" id="paste-area" placeholder="여기에 클로드가 짜준 계획을 붙여넣으세요..."></textarea>
+<button class="fb" onclick="parsePaste()">체크리스트로 변환하기 ✦</button>
+<div id="paste-preview"></div>
+<div id="plan-result"></div>
+</div>
+
+<!-- 기록·성과 -->
+<div id="s-records" class="sec">
+<div class="rec-header">
+<span class="rec-title">📊 나의 작업 기록</span>
+<select class="year-sel" id="year-sel" onchange="renderRecords()"></select>
+</div>
+<div id="rec-body"></div>
+</div>
+
+<!-- 목표 -->
+<div id="s-goals" class="sec">
+<div style="font-size:12px;color:var(--text2);background:var(--bg2);border-radius:var(--r);padding:10px 12px;margin-bottom:14px;line-height:1.7">
+📅 <b>매달 초</b>에 수익·작업량을 업데이트해주세요<br>
+📆 <b>연간 횟수</b>는 할 때마다 +1씩 올려주세요
+</div>
+<div style="font-size:13px;font-weight:700;margin-bottom:8px;color:var(--text)">💰 이번 달 수익</div>
+<div class="gc">
+<div class="gt"><span class="ge">🖼</span><div><div class="gtit">스톡 월 수익</div><div class="glb">목표: 월 100,000원</div></div></div>
+<div class="pt"><div class="pf" id="g1f" style="width:15%"></div></div>
+<div class="pb"><span class="ptx" id="g1t">15,000원</span><span class="pp" id="g1p">15%</span></div>
+<input type="range" class="gsl" min="0" max="100000" step="500" value="15000" oninput="updG(1,this.value)">
+</div>
+<div class="gc">
+<div class="gt"><span class="ge">🏆</span><div><div class="gtit">OGQ 월 수익</div><div class="glb">목표: 월 10,000원</div></div></div>
+<div class="pt"><div class="pf" id="g2f" style="width:50%"></div></div>
+<div class="pb"><span class="ptx" id="g2t">5,000원</span><span class="pp" id="g2p">50%</span></div>
+<input type="range" class="gsl" min="0" max="10000" step="100" value="5000" oninput="updG(2,this.value)">
+</div>
+<div style="font-size:13px;font-weight:700;margin:14px 0 8px;color:var(--text)">🎨 이번 달 작업량</div>
+<div class="gc">
+<div class="gt"><span class="ge">✏️</span><div><div class="gtit">스톡 요소 그린 개수</div><div class="glb">목표: 월 50개</div></div></div>
+<div class="pt"><div class="pf" id="g3f" style="width:0%"></div></div>
+<div class="pb"><span class="ptx" id="g3t">0개</span><span class="pp" id="g3p">0%</span></div>
+<input type="range" class="gsl" min="0" max="50" step="1" value="0" oninput="updG(3,this.value)">
+</div>
+<div style="font-size:13px;font-weight:700;margin:14px 0 8px;color:var(--text)">📦 이번 분기 OGQ 판매 <span style="font-size:11px;font-weight:400;color:var(--text3)">(프로 조건: 분기 500개)</span></div>
+<div class="gc">
+<div class="gt"><span class="ge">🛒</span><div><div class="gtit">분기 판매 개수</div><div class="glb" id="g4-quarter">2분기 (4~6월)</div></div></div>
+<div class="pt"><div class="pf" id="g4f" style="width:2%"></div></div>
+<div class="pb"><span class="ptx" id="g4t">10개 / 500개</span><span class="pp" id="g4p">2%</span></div>
+<input type="range" class="gsl" min="0" max="500" step="1" value="10" oninput="updG(4,this.value)">
+<div style="font-size:11px;color:var(--text3);margin-top:6px" id="g4-tip">프로까지 490개 더 필요해요.</div>
+</div>
+<div style="font-size:13px;font-weight:700;margin:14px 0 8px;color:var(--text)">📊 올해 누적 활동</div>
+<div class="gc">
+<div class="gt"><span class="ge">😊</span><div><div class="gtit">카카오 이모티콘 제안</div><div class="glb">목표: 연 33회</div></div></div>
+<div class="pt"><div class="pf" id="g5f" style="width:0%"></div></div>
+<div class="pb"><span class="ptx" id="g5t">0회</span><span class="pp" id="g5p">0%</span></div>
+<div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+<button class="btn bs" onclick="stepG(5,-1)">−1</button>
+<div style="flex:1;text-align:center;font-size:13px;font-weight:600" id="g5-num">0 / 33회</div>
+<button class="btn bp bs" onclick="stepG(5,1)">+1</button>
+</div>
+</div>
+<div class="gc">
+<div class="gt"><span class="ge">🏅</span><div><div class="gtit">OGQ 이모티콘 제안</div><div class="glb">목표: 연 33회</div></div></div>
+<div class="pt"><div class="pf" id="g6f" style="width:0%"></div></div>
+<div class="pb"><span class="ptx" id="g6t">0회</span><span class="pp" id="g6p">0%</span></div>
+<div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+<button class="btn bs" onclick="stepG(6,-1)">−1</button>
+<div style="flex:1;text-align:center;font-size:13px;font-weight:600" id="g6-num">0 / 33회</div>
+<button class="btn bp bs" onclick="stepG(6,1)">+1</button>
+</div>
+</div>
+<div class="gc">
+<div class="gt"><span class="ge">📱</span><div><div class="gtit">릴스 업로드</div><div class="glb">목표: 연 66회 (주 2회)</div></div></div>
+<div class="pt"><div class="pf" id="g7f" style="width:0%"></div></div>
+<div class="pb"><span class="ptx" id="g7t">0회</span><span class="pp" id="g7p">0%</span></div>
+<div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+<button class="btn bs" onclick="stepG(7,-1)">−1</button>
+<div style="flex:1;text-align:center;font-size:13px;font-weight:600" id="g7-num">0 / 66회</div>
+<button class="btn bp bs" onclick="stepG(7,1)">+1</button>
+</div>
+</div>
+<div class="gc">
+<div class="gt"><span class="ge">🗂</span><div><div class="gtit">스톡 템플릿 제작</div><div class="glb">목표: 연 33개</div></div></div>
+<div class="pt"><div class="pf" id="g8f" style="width:0%"></div></div>
+<div class="pb"><span class="ptx" id="g8t">0개</span><span class="pp" id="g8p">0%</span></div>
+<div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+<button class="btn bs" onclick="stepG(8,-1)">−1</button>
+<div style="flex:1;text-align:center;font-size:13px;font-weight:600" id="g8-num">0 / 33개</div>
+<button class="btn bp bs" onclick="stepG(8,1)">+1</button>
+</div>
+</div>
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+function sLS(k,v){try{localStorage.setItem('plnr_'+k,JSON.stringify(v));autoSync()}catch(e){}}
+function lLS(k,d){try{const v=localStorage.getItem('plnr_'+k);return v!=null?JSON.parse(v):d}catch(e){return d}}
+
+let plan=lLS('plan',[]);
+let taskSt=lLS('tst',{});
+let evts=lLS('evts',[]);
+let goals=lLS('goals',{1:15000,2:5000,3:0,4:10,5:0,6:0,7:0,8:0});
+let weekLogs=lLS('weekLogs',[]);
+
+const DAYS=['월','화','수','목','금'];
+
+function sw(tab){
+  const ids=['today','paste','records','goals'];
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',ids[i]===tab));
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s-'+tab).classList.add('active');
+  if(tab==='today')renderToday();
+  if(tab==='goals')renderGoals();
+  if(tab==='records')renderRecords();
 }
 
-function doPost(e) {
-  try {
-    const data = JSON.parse(e.postData.contents);
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    let sheet = ss.getSheetByName('플래너 기록');
-    if (!sheet) sheet = ss.insertSheet('플래너 기록');
-    const now = new Date().toLocaleString('ko-KR',{timeZone:'Asia/Seoul'});
-    const types = ['weekLogs','goals','plan','taskSt'];
-    const lastRow = sheet.getLastRow();
-    if (lastRow < 1) sheet.appendRow(['저장시간','타입','데이터']);
-    for (const type of types) {
-      if (data[type] === undefined) continue;
-      let found = false;
-      if (lastRow > 1) {
-        const vals = sheet.getRange(2,2,lastRow-1,1).getValues();
-        for (let i=0;i<vals.length;i++) {
-          if (vals[i][0]===type) {
-            sheet.getRange(i+2,1,1,3).setValues([[now,type,JSON.stringify(data[type])]]);
-            found=true; break;
-          }
-        }
-      }
-      if (!found) sheet.appendRow([now,type,JSON.stringify(data[type])]);
-    }
-    return respond({ok:true});
-  } catch(e) { return respond({ok:false,error:e.message}); }
+function getMon(off){const d=new Date();const dy=d.getDay()||7;d.setDate(d.getDate()-(dy-1)+off*7);d.setHours(0,0,0,0);return d}
+function fmtD(d){return`${d.getMonth()+1}/${d.getDate()}`}
+function fmtYMD(d){return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+
+function togEv(){document.getElementById('ev-form').classList.toggle('open')}
+function addEv(){
+  const nm=document.getElementById('ev-nm').value.trim();
+  if(!nm){alert('작업 이름 입력해주세요');return}
+  evts.push({id:'e'+Date.now(),name:nm,day:parseInt(document.getElementById('ev-dy').value),min:parseInt(document.getElementById('ev-mn').value)||90,memo:document.getElementById('ev-mo').value.trim()});
+  sLS('evts',evts);document.getElementById('ev-nm').value='';document.getElementById('ev-mo').value='';
+  document.getElementById('ev-form').classList.remove('open');renderEvList();toast('이벤트 추가됨!')
+}
+function delEv(id){evts=evts.filter(e=>e.id!==id);sLS('evts',evts);renderEvList()}
+function renderEvList(){
+  const el=document.getElementById('ev-list');
+  if(!el)return;
+  if(!evts.length){el.innerHTML='<div style="font-size:12px;color:var(--text3);text-align:center;padding:4px 0">그라폴리오·공모전 등 추가하면 계획에 반영돼요</div>';return}
+  el.innerHTML=evts.map(e=>`<div class="evi"><div><div class="evnm">📌 ${e.name}</div><div class="evmt">${DAYS[e.day]}요일 · ${e.min}분${e.memo?' · '+e.memo:''}</div></div><button class="btn bd bs" onclick="delEv('${e.id}')">삭제</button></div>`).join('')
 }
 
-function respond(obj) {
-  return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
+function parsePaste(){
+  const raw=document.getElementById('paste-area').value.trim();
+  if(!raw){alert('클로드 계획을 붙여넣어 주세요');return}
+  saveWeekLog();
+  const lines=raw.split('\n');
+  const dayMap={'월':0,'화':1,'수':2,'목':3,'금':4};
+  const np=[{day:'월',avail:120,used:0,tasks:[]},{day:'화',avail:120,used:0,tasks:[]},{day:'수',avail:180,used:0,tasks:[]},{day:'목',avail:120,used:0,tasks:[]},{day:'금',avail:120,used:0,tasks:[]}];
+  let cur=-1;
+  for(const line of lines){
+    const tr=line.trim();if(!tr)continue;
+    for(const[k,v]of Object.entries(dayMap)){if(tr.startsWith(k)||tr.includes(k+'요일')){cur=v;break}}
+    if(cur>=0&&(tr.startsWith('-')||tr.startsWith('•')||tr.startsWith('·')||/^\d+\./.test(tr)||/^\[/.test(tr))){
+      let tx=tr.replace(/^[-•·\d+\.]\s*/,'').trim();
+      let min=30;const mm=tx.match(/약\s*(\d+)\s*분/)||tx.match(/(\d+)\s*분/);if(mm)min=parseInt(mm[1]);
+      let tags=['stock'];
+      if(/이모티콘|카카오|ogq|OGQ/i.test(tx))tags=['emo'];
+      else if(/릴스|인스타|툰/i.test(tx))tags=['insta'];
+      else if(/이벤트|공모전|그라폴리오/i.test(tx))tags=['event'];
+      let kwt='';
+      if(/요소.*\[|\[.*\].*스케치|\[.*\].*그리/i.test(tx))kwt='e';
+      else if(/템플릿.*\[|\[.*\].*템플릿|\[.*\].*완성/i.test(tx))kwt='t';
+      np[cur].tasks.push({id:'p_'+cur+'_'+np[cur].tasks.length,tx,tags,min,kwt});
+      np[cur].used+=min;
+    }
+  }
+  const total=np.reduce((s,d)=>s+d.tasks.length,0);
+  if(total===0){
+    document.getElementById('paste-preview').innerHTML='<div class="empty-st">요일·할일을 인식하지 못했어요 😢<br>월요일 / - 할일 (약 30분) 형식으로 붙여넣어 보세요</div>';return;
+  }
+  plan=np;taskSt={};sLS('plan',plan);sLS('tst',taskSt);
+  renderPlan();
+  document.getElementById('paste-area').value='';
+  document.getElementById('paste-preview').innerHTML=`<div style="padding:12px;background:var(--bg2);border-radius:var(--r);font-size:13px;color:var(--text2);text-align:center">✅ ${total}개 할일이 주간계획에 등록됐어요!</div>`;
+  toast('계획 등록 완료!');
 }
+
+function saveWeekLog(){
+  if(!plan.length)return;
+  const allTasks=plan.flatMap(d=>d.tasks);
+  const total=allTasks.length;
+  if(total===0)return;
+  const done=allTasks.filter(t=>!!taskSt[t.id]);
+  if(done.length===0)return;
+  const mon=getMon(0);
+  const weekKey=fmtYMD(mon);
+  if(weekLogs.find(w=>w.weekStart===weekKey))return;
+  const catCount={stock:0,emo:0,insta:0,event:0};
+  done.forEach(t=>{const tg=t.tags[0]||'stock';if(catCount[tg]!==undefined)catCount[tg]++});
+  weekLogs.push({
+    weekStart:weekKey,
+    year:mon.getFullYear(),
+    month:mon.getMonth()+1,
+    total,done:done.length,
+    pct:Math.round(done.length/total*100),
+    cats:catCount,
+    tasks:done.map(t=>t.tx).slice(0,10)
+  });
+  sLS('weekLogs',weekLogs);
+}
+
+function renderRecords(){
+  const sel=document.getElementById('year-sel');
+  const years=[...new Set(weekLogs.map(w=>w.year))].sort((a,b)=>b-a);
+  const curYear=new Date().getFullYear();
+  if(!years.includes(curYear))years.unshift(curYear);
+  sel.innerHTML=years.map(y=>`<option value="${y}">${y}년</option>`).join('');
+  const yr=parseInt(sel.value)||curYear;
+  const logs=weekLogs.filter(w=>w.year===yr);
+  const el=document.getElementById('rec-body');
+  const actualData={};
+  plan.forEach(d=>d.tasks.forEach(t=>{
+    if(t.actual&&t.actual>0){
+      const key=t.tags[0]||'stock';
+      if(!actualData[key])actualData[key]=[];
+      actualData[key].push({tx:t.tx,est:t.min,actual:t.actual});
+    }
+  }));
+  const totalActual=Object.values(actualData).flat().length;
+  const weeksRecorded=logs.length;
+  const weeksLeft=Math.max(0,6-weeksRecorded);
+  let html=`<div style="background:var(--bg2);border-radius:var(--rl);padding:14px;margin-bottom:14px">
+  <div style="font-size:13px;font-weight:700;margin-bottom:8px">⏱ 실제 소요시간 기록 현황</div>`;
+  if(totalActual===0&&weeksRecorded===0){
+    html+=`<div style="font-size:12px;color:var(--text2);line-height:1.8">아직 기록이 없어요 🌱<br>할일 완료 후 <b>실제 걸린 시간</b>을 입력하면<br>6주 후 클로드가 패턴을 분석해드려요!</div>`;
+  } else {
+    const prog=Math.min(100,Math.round(weeksRecorded/6*100));
+    html+=`<div style="font-size:12px;color:var(--text2);margin-bottom:8px">${weeksRecorded}주 기록 완료 ${weeksLeft>0?`· <b>${weeksLeft}주 더</b> 쌓으면 패턴 분석 가능`:'· <b>분석 준비 완료! 🎉</b>'}</div>
+    <div style="height:6px;background:var(--bg3);border-radius:3px;margin-bottom:10px;overflow:hidden"><div style="height:100%;border-radius:3px;background:var(--ke);width:${prog}%"></div></div>`;
+    if(totalActual>0){
+      html+=`<div style="font-size:12px;font-weight:600;margin-bottom:6px;color:var(--text)">이번 주 기록된 소요시간</div>`;
+      Object.entries(actualData).forEach(([cat,items])=>{
+        const[,lbl]=tagL(cat);
+        const avg=Math.round(items.reduce((s,i)=>s+i.actual,0)/items.length);
+        html+=`<div style="font-size:12px;color:var(--text2);margin-bottom:4px"><span class="tag tg-${cat==='stock'?'s':cat==='emo'?'e':cat==='insta'?'i':'v'}">${lbl}</span> 평균 <b>${avg}분</b> (${items.length}개 작업)</div>`;
+      });
+    }
+  }
+  html+=`</div>`;
+  if(!logs.length){html+='<div class="no-rec">아직 주간 기록이 없어요 🌱<br>매주 할일을 체크하면<br>여기에 성과가 쌓여요!</div>';el.innerHTML=html;return}
+  const totDone=logs.reduce((s,w)=>s+w.done,0);
+  const totTotal=logs.reduce((s,w)=>s+w.total,0);
+  const avgPct=Math.round(logs.reduce((s,w)=>s+w.pct,0)/logs.length);
+  const catTot={stock:0,emo:0,insta:0,event:0};
+  logs.forEach(w=>{for(const k of Object.keys(catTot))catTot[k]+=(w.cats[k]||0)});
+  const byMonth={};
+  for(let m=1;m<=12;m++)byMonth[m]=0;
+  logs.forEach(w=>{byMonth[w.month]=(byMonth[w.month]||0)+w.done});
+  const maxMonth=Math.max(...Object.values(byMonth),1);
+  html+=`<div class="rec-summary">
+  <div class="rec-card"><div class="rec-num">${totDone}</div><div class="rec-lbl">총 완료 할일</div><div class="rec-sub">${logs.length}주 기록</div></div>
+  <div class="rec-card"><div class="rec-num">${avgPct}%</div><div class="rec-lbl">평균 달성률</div><div class="rec-sub">전체 ${totTotal}개 중</div></div>
+  </div>
+  <div class="cat-row">
+  <div class="cat-card"><div class="cat-n" style="color:var(--cc)">${catTot.stock}</div><div class="cat-l">스톡</div></div>
+  <div class="cat-card"><div class="cat-n" style="color:var(--ec)">${catTot.emo}</div><div class="cat-l">이모티콘</div></div>
+  <div class="cat-card"><div class="cat-n" style="color:var(--ic)">${catTot.insta}</div><div class="cat-l">인스타툰</div></div>
+  </div>
+  <div class="month-chart"><div class="mc-title">월별 완료 할일 수</div>`;
+  const mNames=['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+  for(let m=1;m<=12;m++){
+    const cnt=byMonth[m]||0;
+    const w=cnt?Math.max(8,Math.round(cnt/maxMonth*100)):0;
+    html+=`<div class="mc-row"><div class="mc-label">${mNames[m-1]}</div><div class="mc-bar-wrap"><div class="mc-bar" style="width:${w}%">${cnt>0?`<span class="mc-bar-txt">${cnt}</span>`:''}</div></div><div class="mc-count">${cnt}</div></div>`;
+  }
+  html+=`</div>`;
+  const recent=[...logs].sort((a,b)=>b.weekStart.localeCompare(a.weekStart)).slice(0,8);
+  html+=`<div class="week-records"><div class="wr-title">최근 주간 기록</div>`;
+  for(const w of recent){
+    const d=new Date(w.weekStart);const fe=new Date(d);fe.setDate(fe.getDate()+4);
+    html+=`<div class="wr-item"><div class="wr-week">${fmtD(d)} ~ ${fmtD(fe)} <span style="font-size:11px;color:var(--text3);margin-left:4px">${w.pct}% 달성</span></div><div class="wr-meta">완료 ${w.done}/${w.total}개 · 스톡 ${w.cats.stock||0} / 이모티콘 ${w.cats.emo||0} / 인스타 ${w.cats.insta||0}</div>${w.tasks.length?`<div class="wr-tasks">${w.tasks.slice(0,3).join(' · ')}${w.tasks.length>3?' 외 '+(w.tasks.length-3)+'개':''}</div>`:''}</div>`;
+  }
+  html+=`</div>`;
+  el.innerHTML=html;
+}
+
+function tagL(t){if(t==='stock')return['tg-s','스톡'];if(t==='emo')return['tg-e','이모티콘'];if(t==='insta')return['tg-i','인스타툰'];if(t==='event')return['tg-v','이벤트'];return['','']}
+
+function renderPlan(){
+  const pr=document.getElementById('plan-result');
+  if(!pr)return;
+  if(!plan.length){pr.innerHTML='';return}
+  let html='';
+  for(const d of plan){
+    if(!d.tasks.length)continue;
+    html+=`<div><div class="pdh"><span class="pdn">${d.day}요일 <span style="font-size:12px;font-weight:400;color:var(--text2)">(${d.tasks.length}개)</span></span><span class="pdm">${Math.min(d.used,d.avail+30)}분</span></div>`;
+    for(const t of d.tasks){
+      const done=!!taskSt[t.id];
+      const kc=t.kwt==='e'?' kwe':t.kwt==='t'?' kwt':'';
+      html+=`<div class="ti${done?' done':''}${kc}" id="ti-${t.id}">
+      <div class="chk" onclick="togD('${t.id}')">${done?'✓':''}</div>
+      <div class="tb"><div class="tx" id="tx-${t.id}" ondblclick="startEd('${t.id}')">${t.tx}</div>
+      <div class="tmeta">`;
+      for(const tg of t.tags){const[c,l]=tagL(tg);if(l)html+=`<span class="tag ${c}">${l}</span>`}
+      const hasActual=t.actual&&t.actual>0;
+      html+=`<span class="tmin">예상 ${t.min}분</span></div>
+      <div class="actual-row">
+      <span class="actual-label">실제 소요:</span>
+      <input class="actual-inp${hasActual?' filled':''}" type="number" min="1" max="480" placeholder="?" value="${hasActual?t.actual:''}" onclick="event.stopPropagation()" onchange="setActual('${t.id}',this.value)" id="act-${t.id}">
+      <span class="actual-unit">분</span>
+      ${hasActual?`<span style="font-size:10px;color:var(--ke)">✓ 기록됨</span>`:''}
+      </div>
+      <div class="tact"><button class="btn bs" onclick="startEd('${t.id}')">수정</button><button class="btn bd bs" onclick="delT('${t.id}')">삭제</button></div>
+      </div></div>`;
+    }
+    html+=`<button class="add-tb" onclick="addT('${d.day}')">+ 할일 추가</button></div>`;
+  }
+  pr.innerHTML=html;
+}
+
+function togD(id){
+  taskSt[id]=!taskSt[id];
+  for(const d of plan)for(const t of d.tasks)if(t.id===id)t.done=!!taskSt[id];
+  sLS('tst',taskSt);sLS('plan',plan);renderPlan();
+}
+function getT(id){for(const d of plan)for(const t of d.tasks)if(t.id===id)return t;return null}
+function startEd(id){
+  const el=document.getElementById('tx-'+id);const t=getT(id);if(!el||!t)return;
+  el.innerHTML=`<textarea class="txinp" rows="2" id="inp-${id}">${t.tx}</textarea><div class="tact" style="margin-top:5px"><button class="btn bp bs" onclick="saveEd('${id}')">저장</button><button class="btn bs" onclick="renderPlan()">취소</button></div>`;
+}
+function saveEd(id){
+  const v=document.getElementById('inp-'+id)?.value.trim();if(!v)return;
+  const t=getT(id);if(t)t.tx=v;sLS('plan',plan);renderPlan();toast('수정 완료!')
+}
+function delT(id){
+  for(const d of plan)d.tasks=d.tasks.filter(t=>t.id!==id);
+  delete taskSt[id];sLS('plan',plan);sLS('tst',taskSt);renderPlan();toast('삭제됨')
+}
+function addT(dn){
+  const d=plan.find(p=>p.day===dn);if(!d)return;
+  const id='m_'+Date.now();
+  d.tasks.push({id,tx:'새 할일 (눌러서 수정)',tags:['stock'],min:30});
+  sLS('plan',plan);renderPlan();setTimeout(()=>startEd(id),50);
+}
+
+function renderToday(){
+  const now=new Date();const dow=now.getDay();
+  const di=dow===0?-1:dow-1;
+  const dns=['일','월','화','수','목','금','토'];
+  const lbl=document.getElementById('today-label');
+  const el=document.getElementById('today-list');
+  if(!lbl||!el)return;
+  lbl.textContent=`오늘: ${now.getMonth()+1}/${now.getDate()}(${dns[dow]})`;
+  if(di<0||di>4||!plan.length){el.innerHTML=`<div class="empty-st">${!plan.length?'계획붙여넣기 탭에서 계획을 먼저 등록하세요 🎨':'오늘은 주말! 푹 쉬세요 🌿'}</div>`;updSt([]);return}
+  const d=plan[di];
+  if(!d||!d.tasks.length){el.innerHTML='<div class="empty-st">오늘 할일이 없어요</div>';updSt([]);return}
+  let html='';
+  for(const t of d.tasks){
+    const done=!!taskSt[t.id];
+    const kc=t.kwt==='e'?' kwe':t.kwt==='t'?' kwt':'';
+    html+=`<div class="ti${done?' done':''}${kc}" onclick="togDT('${t.id}')">
+    <div class="chk">${done?'✓':''}</div>
+    <div class="tb"><div class="tx">${t.tx}</div>
+    <div class="tmeta">`;
+    for(const tg of t.tags){const[c,l]=tagL(tg);if(l)html+=`<span class="tag ${c}">${l}</span>`}
+    const hasA=t.actual&&t.actual>0;
+    html+=`<span class="tmin">예상 ${t.min}분</span></div>
+    <div class="actual-row">
+    <span class="actual-label">실제 소요:</span>
+    <input class="actual-inp${hasA?' filled':''}" type="number" min="1" max="480" placeholder="?" value="${hasA?t.actual:''}" onclick="event.stopPropagation()" onchange="setActual('${t.id}',this.value)" id="act-${t.id}">
+    <span class="actual-unit">분</span>
+    ${hasA?`<span style="font-size:10px;color:var(--ke)">✓</span>`:''}
+    </div>
+    </div></div>`;
+  }
+  el.innerHTML=html;updSt(d.tasks);
+}
+
+function setActual(id,val){
+  val=parseInt(val);if(!val||val<1)return;
+  const t=getT(id);if(!t)return;
+  t.actual=val;
+  sLS('plan',plan);
+  const inp=document.getElementById('act-'+id);
+  if(inp)inp.classList.add('filled');
+  toast('실제 소요시간 기록됨 ✓');
+}
+function togDT(id){
+  taskSt[id]=!taskSt[id];
+  for(const d of plan)for(const t of d.tasks)if(t.id===id)t.done=!!taskSt[id];
+  sLS('tst',taskSt);sLS('plan',plan);renderToday();
+}
+function updSt(tasks){
+  const done=tasks.filter(t=>!!taskSt[t.id]).length;
+  const tot=tasks.length;const pct=tot?Math.round(done/tot*100):0;
+  document.getElementById('sd').textContent=done;
+  document.getElementById('st').textContent=tot;
+  document.getElementById('sp').textContent=pct+'%';
+}
+
+function renderGoals(){for(const[k,v]of Object.entries(goals))updG(parseInt(k),v,true)}
+function updG(g,val,silent){
+  val=parseInt(val);goals[g]=val;if(!silent)sLS('goals',goals);
+  const f=document.getElementById('g'+g+'f');
+  const t=document.getElementById('g'+g+'t');
+  const p=document.getElementById('g'+g+'p');
+  const sl=document.querySelector('[oninput="updG('+g+',this.value)"]');
+  let pct=0,tx='',ptx='';
+  if(g===1){pct=Math.min(100,Math.round(val/100000*100));tx=val.toLocaleString()+'원';ptx=pct+'%'}
+  else if(g===2){pct=Math.min(100,Math.round(val/10000*100));tx=val.toLocaleString()+'원';ptx=pct+'%'}
+  else if(g===3){pct=Math.min(100,Math.round(val/50*100));tx=val+'개 / 50개';ptx=pct+'%'}
+  else if(g===4){
+    pct=Math.min(100,Math.round(val/500*100));tx=val+'개 / 500개';ptx=pct+'%';
+    const tip=document.getElementById('g4-tip');
+    if(tip)tip.textContent=val>=500?'🎉 프로 조건 달성!':'프로까지 '+(500-val)+'개 더 필요해요. 지금은 제안 횟수 늘리기에 집중해요 💪';
+    const m=new Date().getMonth()+1;
+    const q=m<=3?'1분기(1~3월)':m<=6?'2분기(4~6월)':m<=9?'3분기(7~9월)':'4분기(10~12월)';
+    const ql=document.getElementById('g4-quarter');if(ql)ql.textContent=q;
+  }
+  else if(g===5){pct=Math.min(100,Math.round(val/33*100));tx=val+'회 / 33회';ptx=pct+'%';const n=document.getElementById('g5-num');if(n)n.textContent=val+' / 33회'}
+  else if(g===6){pct=Math.min(100,Math.round(val/33*100));tx=val+'회 / 33회';ptx=pct+'%';const n=document.getElementById('g6-num');if(n)n.textContent=val+' / 33회'}
+  else if(g===7){pct=Math.min(100,Math.round(val/66*100));tx=val+'회 / 66회';ptx=pct+'%';const n=document.getElementById('g7-num');if(n)n.textContent=val+' / 66회'}
+  else if(g===8){pct=Math.min(100,Math.round(val/33*100));tx=val+'개 / 33개';ptx=pct+'%';const n=document.getElementById('g8-num');if(n)n.textContent=val+' / 33개'}
+  if(f)f.style.width=pct+'%';if(t)t.textContent=tx;if(p)p.textContent=ptx;
+  if(sl&&!silent)sl.value=val;
+}
+function stepG(g,dir){
+  const cur=goals[g]||0;
+  const maxMap={5:33,6:33,7:66,8:33};
+  const nv=Math.max(0,Math.min(maxMap[g]||33,cur+dir));
+  updG(g,nv);toast(dir>0?'+1 기록됨!':'−1 취소됨');
+}
+
+// ── 구글 시트 동기화 (읽기 좋은 형태로 저장) ──
+const GS_URL='https://script.google.com/macros/s/AKfycbyaq5q1kAycmn0wAJWYyZvnUW7eEosyWzlSopvP56gfpobF9oZ03bgh4gFZgg6aUJwQHQ/exec';
+
+// 시트에 저장할 때 사람이 읽기 좋게 펼쳐서 보내기
+function buildSheetPayload(){
+  // 목표 데이터: 항목별 행으로
+  const goalsRows=[
+    ['항목','현재값','목표값','달성률'],
+    ['스톡 월수익(원)', goals[1], 100000, Math.round(goals[1]/100000*100)+'%'],
+    ['OGQ 월수익(원)', goals[2], 10000, Math.round(goals[2]/10000*100)+'%'],
+    ['스톡 요소(개/월)', goals[3], 50, Math.round(goals[3]/50*100)+'%'],
+    ['OGQ 분기판매(개)', goals[4], 500, Math.round(goals[4]/500*100)+'%'],
+    ['카카오 제안(회)', goals[5], 33, Math.round(goals[5]/33*100)+'%'],
+    ['OGQ 제안(회)', goals[6], 33, Math.round(goals[6]/33*100)+'%'],
+    ['릴스 업로드(회)', goals[7], 66, Math.round(goals[7]/66*100)+'%'],
+    ['스톡 템플릿(개)', goals[8], 33, Math.round(goals[8]/33*100)+'%'],
+  ];
+
+  // 주간기록: 날짜·달성률·카테고리별 열로
+  const weekRows=[['주간시작','연도','월','완료','전체','달성률(%)','스톡','이모티콘','인스타툰','이벤트','완료작업(일부)']];
+  for(const w of weekLogs){
+    weekRows.push([
+      w.weekStart, w.year, w.month,
+      w.done, w.total, w.pct,
+      w.cats.stock||0, w.cats.emo||0, w.cats.insta||0, w.cats.event||0,
+      (w.tasks||[]).slice(0,3).join(' / ')
+    ]);
+  }
+
+  // 현재 주 계획: 요일·할일·태그·예상·실제 시간
+  const planRows=[['요일','할일내용','유형','예상시간(분)','실제시간(분)','완료여부']];
+  for(const d of plan){
+    for(const t of d.tasks){
+      planRows.push([
+        d.day+'요일',
+        t.tx,
+        t.tags[0]||'stock',
+        t.min,
+        t.actual||'',
+        taskSt[t.id]?'완료':'미완료'
+      ]);
+    }
+  }
+
+  return {type:'saveReadable', goalsRows, weekRows, planRows};
+}
+
+async function syncSave(){
+  const syncEl=document.getElementById('sync-status');
+  if(syncEl){syncEl.textContent='☁️ 저장 중...';syncEl.style.color='var(--text3)'}
+  try{
+    await fetch(GS_URL,{
+      method:'POST',
+      mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(buildSheetPayload())
+    });
+    if(syncEl){syncEl.textContent='☁️ 저장됨 ✓';syncEl.style.color='var(--ke)'}
+    sLS('lastSync',new Date().toLocaleString('ko-KR'));
+  }catch(e){
+    if(syncEl){syncEl.textContent='☁️ 저장 실패';syncEl.style.color='#E05C5C'}
+  }
+}
+
+async function syncLoad(){
+  const syncEl=document.getElementById('sync-status');
+  if(syncEl){syncEl.textContent='☁️ 불러오는 중...';syncEl.style.color='var(--text3)'}
+  try{
+    const res=await fetch(GS_URL+'?t='+Date.now());
+    const json=await res.json();
+    if(json.ok&&json.data){
+      const d=json.data;
+      if(d.weekLogs&&d.weekLogs.length){weekLogs=d.weekLogs;sLS('weekLogs',weekLogs)}
+      if(d.goals&&Object.keys(d.goals).length){goals=d.goals;sLS('goals',goals)}
+      if(d.plan&&d.plan.length){plan=d.plan;sLS('plan',plan)}
+      if(d.taskSt){taskSt=d.taskSt;sLS('tst',taskSt)}
+      renderToday();renderPlan();renderGoals();
+      if(syncEl){syncEl.textContent='☁️ 불러오기 완료 ✓';syncEl.style.color='var(--ke)'}
+      toast('구글 시트에서 데이터 불러왔어요!');
+    }
+  }catch(e){
+    if(syncEl){syncEl.textContent='☁️ 연결 실패';syncEl.style.color='#E05C5C'}
+  }
+}
+
+let syncTimer;
+function autoSync(){clearTimeout(syncTimer);syncTimer=setTimeout(syncSave,3000)}
+
+let tTimer;
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(tTimer);tTimer=setTimeout(()=>t.classList.remove('show'),2200)}
+
+renderEvList();
+if(plan.length)renderPlan();
+renderGoals();
+renderToday();
+const yrSel=document.getElementById('year-sel');
+const curYr=new Date().getFullYear();
+yrSel.innerHTML=`<option value="${curYr}">${curYr}년</option>`;
+syncLoad();
+</script>
+</body>
+</html>
