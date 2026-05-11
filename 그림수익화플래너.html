@@ -143,8 +143,8 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
 <div class="topbar-title">🎨 그림 수익화 플래너</div>
 <div style="display:flex;align-items:center;gap:8px">
-<span id="sync-status" style="font-size:11px;color:var(--text3)">☁️ 연결 중...</span>
-<button onclick="syncLoad()" style="font-size:11px;padding:3px 8px;border:1px solid var(--border2);border-radius:6px;background:var(--bg);color:var(--text2);cursor:pointer">새로고침</button>
+
+
 </div>
 </div>
 <div class="tabs">
@@ -201,6 +201,10 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 <span class="rec-title">📊 나의 작업 기록</span>
 <select class="year-sel" id="year-sel" onchange="renderRecords()"></select>
 </div>
+
+<button onclick="copyMonthlySummary()" style="width:100%;padding:11px;font-size:13px;font-weight:700;background:var(--accent);color:var(--accent-inv);border:none;border-radius:var(--r);cursor:pointer;margin-bottom:14px">
+  📋 이번 달 요약 복사 (노션용)
+</button>
 <div id="rec-body"></div>
 </div>
 
@@ -285,7 +289,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 <div class="toast" id="toast"></div>
 
 <script>
-function sLS(k,v){try{localStorage.setItem('plnr_'+k,JSON.stringify(v));autoSync()}catch(e){}}
+function sLS(k,v){try{localStorage.setItem('plnr_'+k,JSON.stringify(v))}catch(e){}}
 function lLS(k,d){try{const v=localStorage.getItem('plnr_'+k);return v!=null?JSON.parse(v):d}catch(e){return d}}
 
 let plan=lLS('plan',[]);
@@ -608,93 +612,7 @@ function stepG(g,dir){
   updG(g,nv);toast(dir>0?'+1 기록됨!':'−1 취소됨');
 }
 
-// ── 구글 시트 동기화 (읽기 좋은 형태로 저장) ──
-const GS_URL='https://script.google.com/macros/s/AKfycbyaq5q1kAycmn0wAJWYyZvnUW7eEosyWzlSopvP56gfpobF9oZ03bgh4gFZgg6aUJwQHQ/exec';
 
-// 시트에 저장할 때 사람이 읽기 좋게 펼쳐서 보내기
-function buildSheetPayload(){
-  // 목표 데이터: 항목별 행으로
-  const goalsRows=[
-    ['항목','현재값','목표값','달성률'],
-    ['스톡 월수익(원)', goals[1], 100000, Math.round(goals[1]/100000*100)+'%'],
-    ['OGQ 월수익(원)', goals[2], 10000, Math.round(goals[2]/10000*100)+'%'],
-    ['스톡 요소(개/월)', goals[3], 50, Math.round(goals[3]/50*100)+'%'],
-    ['OGQ 분기판매(개)', goals[4], 500, Math.round(goals[4]/500*100)+'%'],
-    ['카카오 제안(회)', goals[5], 33, Math.round(goals[5]/33*100)+'%'],
-    ['OGQ 제안(회)', goals[6], 33, Math.round(goals[6]/33*100)+'%'],
-    ['릴스 업로드(회)', goals[7], 66, Math.round(goals[7]/66*100)+'%'],
-    ['스톡 템플릿(개)', goals[8], 33, Math.round(goals[8]/33*100)+'%'],
-  ];
-
-  // 주간기록: 날짜·달성률·카테고리별 열로
-  const weekRows=[['주간시작','연도','월','완료','전체','달성률(%)','스톡','이모티콘','인스타툰','이벤트','완료작업(일부)']];
-  for(const w of weekLogs){
-    weekRows.push([
-      w.weekStart, w.year, w.month,
-      w.done, w.total, w.pct,
-      w.cats.stock||0, w.cats.emo||0, w.cats.insta||0, w.cats.event||0,
-      (w.tasks||[]).slice(0,3).join(' / ')
-    ]);
-  }
-
-  // 현재 주 계획: 요일·할일·태그·예상·실제 시간
-  const planRows=[['요일','할일내용','유형','예상시간(분)','실제시간(분)','완료여부']];
-  for(const d of plan){
-    for(const t of d.tasks){
-      planRows.push([
-        d.day+'요일',
-        t.tx,
-        t.tags[0]||'stock',
-        t.min,
-        t.actual||'',
-        taskSt[t.id]?'완료':'미완료'
-      ]);
-    }
-  }
-
-  return {type:'saveReadable', goalsRows, weekRows, planRows};
-}
-
-async function syncSave(){
-  const syncEl=document.getElementById('sync-status');
-  if(syncEl){syncEl.textContent='☁️ 저장 중...';syncEl.style.color='var(--text3)'}
-  try{
-    await fetch(GS_URL,{
-      method:'POST',
-      mode:'no-cors',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(buildSheetPayload())
-    });
-    if(syncEl){syncEl.textContent='☁️ 저장됨 ✓';syncEl.style.color='var(--ke)'}
-    sLS('lastSync',new Date().toLocaleString('ko-KR'));
-  }catch(e){
-    if(syncEl){syncEl.textContent='☁️ 저장 실패';syncEl.style.color='#E05C5C'}
-  }
-}
-
-async function syncLoad(){
-  const syncEl=document.getElementById('sync-status');
-  if(syncEl){syncEl.textContent='☁️ 불러오는 중...';syncEl.style.color='var(--text3)'}
-  try{
-    const res=await fetch(GS_URL+'?t='+Date.now());
-    const json=await res.json();
-    if(json.ok&&json.data){
-      const d=json.data;
-      if(d.weekLogs&&d.weekLogs.length){weekLogs=d.weekLogs;sLS('weekLogs',weekLogs)}
-      if(d.goals&&Object.keys(d.goals).length){goals=d.goals;sLS('goals',goals)}
-      if(d.plan&&d.plan.length){plan=d.plan;sLS('plan',plan)}
-      if(d.taskSt){taskSt=d.taskSt;sLS('tst',taskSt)}
-      renderToday();renderPlan();renderGoals();
-      if(syncEl){syncEl.textContent='☁️ 불러오기 완료 ✓';syncEl.style.color='var(--ke)'}
-      toast('구글 시트에서 데이터 불러왔어요!');
-    }
-  }catch(e){
-    if(syncEl){syncEl.textContent='☁️ 연결 실패';syncEl.style.color='#E05C5C'}
-  }
-}
-
-let syncTimer;
-function autoSync(){clearTimeout(syncTimer);syncTimer=setTimeout(syncSave,3000)}
 
 let tTimer;
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(tTimer);tTimer=setTimeout(()=>t.classList.remove('show'),2200)}
@@ -706,7 +624,7 @@ renderToday();
 const yrSel=document.getElementById('year-sel');
 const curYr=new Date().getFullYear();
 yrSel.innerHTML=`<option value="${curYr}">${curYr}년</option>`;
-syncLoad();
+
 </script>
 </body>
 </html>
